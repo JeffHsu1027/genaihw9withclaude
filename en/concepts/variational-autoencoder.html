@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Variational Autoencoder | Games × AI Paper Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">Games × AI Paper Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a>
+    <a class="lang-switch" href="../../concepts/variational-autoencoder.html" lang="zh-Hant">中文</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">Concept</span>
+  <h1>Variational Autoencoder</h1>
+  <dl class="meta">
+    <dt>Aliases</dt><dd>VAE, autoencoder, latent vector, latent space</dd>
+    <dt>Last updated</dt><dd>2026-11-16</dd>
+    <dt>Sources</dt><dd>1 source</dd>
+  </dl>
+
+  <section>
+    <h2>One-line definition</h2>
+    <p class="lead">A neural network that learns to compress an input into a small latent vector and to reconstruct an approximation of the original input from that vector.</p>
+  </section>
+
+  <section>
+    <h2>Explanation</h2>
+    <p>An autoencoder has two parts. The encoder compresses an input, such as an image, into a low-dimensional vector, and the decoder restores the input from that vector. The training objective is to make the reconstruction as close as possible to the original. Because the vector in the middle is small, the network is forced to keep only the most important information.</p>
+    <p>A variational autoencoder (VAE) adds one requirement: the latent vector should follow a simple probability distribution. This makes the latent space smoother and more regular, so nearby vectors decode to similar results, and new content can be produced by sampling from the distribution.</p>
+    <p>Training a VAE needs no labels, so it is unsupervised learning. It is often used to turn high-dimensional data such as images into a compact representation that later models can handle more easily. The compression is lossy, and details are lost.</p>
+  </section>
+
+  <section>
+    <h2>What each source says</h2>
+    <h3>World Models (2018)</h3>
+    <p><a href="../sources/2018-world-models.html">This paper</a> uses a VAE as the agent's vision component V, compressing every game frame into a latent vector z (p.2–3). z has 32 dimensions in the car racing experiment and 64 in the Doom experiment (p.5, p.7).</p>
+    <ul>
+    <li>The training data comes from 10,000 rollouts collected with a random policy, and the objective is to make the reconstructed frame close to the original (p.4).</li>
+    <li>The authors note that although details are lost in compression, z still captures the essence of each frame (p.5).</li>
+    <li>V is trained separately from the predictive model M. The authors say that in principle both could be trained together end to end, but training them separately is more practical and gives satisfactory results (p.4).</li>
+    </ul>
+    <p>The paper also points out a limitation of this approach: the VAE is trained as a standalone model and does not know which information is useful for the task. It reproduced unimportant brick tile patterns on the walls in Doom but failed to reproduce task-relevant tiles on the road in car racing. Training it together with a model that predicts rewards could help, but the trade-off is that it may need retraining for new tasks (p.12).</p>
+  </section>
+
+  <section>
+    <h2>Related concepts</h2>
+    <ul>
+    <li><a href="world-model.html">World Model</a>: here, the VAE is the vision part of the world model.</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>Written and maintained by AI following the rules in CLAUDE.md. These are reading notes; the original papers are authoritative.</p>
+</footer>
+</body>
+</html>

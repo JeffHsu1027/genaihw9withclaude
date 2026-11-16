@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{title}}｜遊戲 × AI 論文 Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<!-- 範本：concept.zh。複製後把所有 {{...}} 換成內容；{{slug}} 是不含副檔名的檔名。 -->
+<header class="site-header">
+  <a class="site-name" href="../index.html">遊戲 × AI 論文 Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">首頁</a>
+    <a class="lang-switch" href="../en/concepts/{{slug}}.html" lang="en">English</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">概念</span>
+  <h1>{{title}}</h1>
+  <dl class="meta">
+    <dt>別名</dt><dd>{{aliases}}</dd>
+    <dt>最後更新</dt><dd>{{updated}}</dd>
+    <dt>來源數量</dt><dd>{{source_count}}</dd>
+  </dl>
+
+  <section>
+    <h2>一句話定義</h2>
+    <p class="lead">{{definition}}</p>
+  </section>
+
+  <section>
+    <h2>說明</h2>
+    {{explanation}}
+  </section>
+
+  <section>
+    <h2>各來源怎麼說</h2>
+    {{per_source}}
+  </section>
+
+  <section>
+    <h2>相關概念</h2>
+    {{related}}
+  </section>
+</main>
+<footer class="site-footer">
+  <p>由 AI 依照 CLAUDE.md 的規則撰寫與維護。內容為論文閱讀筆記，請以原論文為準。</p>
+</footer>
+</body>
+</html>

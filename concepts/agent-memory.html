@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>代理人記憶（Agent Memory）｜遊戲 × AI 論文 Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">遊戲 × AI 論文 Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">首頁</a>
+    <a class="lang-switch" href="../en/concepts/agent-memory.html" lang="en">English</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">概念</span>
+  <h1>代理人記憶（Agent Memory）</h1>
+  <dl class="meta">
+    <dt>別名</dt><dd>agent memory、記憶系統、情節記憶、技能記憶、世界記憶</dd>
+    <dt>最後更新</dt><dd>2026-11-16</dd>
+    <dt>來源數量</dt><dd>1 個來源</dd>
+  </dl>
+
+  <section>
+    <h2>一句話定義</h2>
+    <p class="lead">讓 AI 代理人把過去的經驗保存下來，並在之後的步驟或任務中取用的機制。</p>
+  </section>
+
+  <section>
+    <h2>說明</h2>
+    <p>語言模型本身不會記得上一次任務發生的事。如果沒有記憶機制，代理人每次都從零開始，同樣的錯誤會反覆出現。</p>
+    <p>代理人記憶的做法是把經驗寫成文字存起來，例如做過什麼嘗試、哪些有效、歸納出什麼通則，需要時再讀回來放進模型的輸入。這種方式不需要重新訓練模型，新的經驗可以立刻使用，內容也可以直接檢視與修改。</p>
+    <p>設計記憶時常見的兩個考量是：經驗要保留多久（只在目前任務內，或跨任務長期保存），以及給誰看（單一代理人私有，或多個代理人共用）。</p>
+  </section>
+
+  <section>
+    <h2>各來源怎麼說</h2>
+    <h3>GUI Agents for Continual Game Generation（2026）</h3>
+    <p><a href="../sources/2026-gui-agents-continual-game-generation.html">這篇論文</a>觀察到同類型的失敗會反覆出現，例如平台遊戲的跳躍弧線錯誤，卻常常每次都要重新發現（p.6）。它依生命週期與範圍兩個維度設計了三層記憶（p.6）：</p>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th>記憶層</th>
+    <th>生命週期</th>
+    <th>範圍</th>
+    <th>內容</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>情節記憶（Episode Memory）</td>
+    <td>任務內</td>
+    <td>兩個代理人共用</td>
+    <td>各回合的摘要、修正與嘗試</td>
+    </tr>
+    <tr>
+    <td>技能記憶（Skill Memory）</td>
+    <td>跨任務</td>
+    <td>各代理人獨立</td>
+    <td>寫程式的常見模式、試玩的互動策略</td>
+    </tr>
+    <tr>
+    <td>世界記憶（World Memory）</td>
+    <td>跨任務</td>
+    <td>所有代理人共用</td>
+    <td>通用的遊戲規則、常見類型與設計原則</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <p>消融實驗（以 GPT-5.4 為骨幹）顯示每一層都有貢獻（p.18）：</p>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th>設定</th>
+    <th>準則通過率</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>不用記憶</td>
+    <td>64.1</td>
+    </tr>
+    <tr>
+    <td>只有情節記憶</td>
+    <td>69.3</td>
+    </tr>
+    <tr>
+    <td>情節加技能</td>
+    <td>71.8</td>
+    </tr>
+    <tr>
+    <td>三層完整</td>
+    <td>72.3</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <p>情節記憶的貢獻最大。作者說明，沒有它時，寫程式的代理人常會重新加回先前已經試過並放棄的修正（p.18）。</p>
+    <p>作者也把所有遊戲共用同一套記憶結構列為限制（p.9）。</p>
+  </section>
+
+  <section>
+    <h2>相關概念</h2>
+    <ul>
+    <li><a href="gui-agent.html">GUI 代理人（GUI Agent）</a>：使用這套記憶的角色之一。</li>
+    <li><a href="fine-tuning.html">微調（Fine-Tuning）</a>：另一種讓系統從資料進步的方式，差別在於微調會改變模型參數，記憶不會。</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>由 AI 依照 CLAUDE.md 的規則撰寫與維護。內容為論文閱讀筆記，請以原論文為準。</p>
+</footer>
+</body>
+</html>

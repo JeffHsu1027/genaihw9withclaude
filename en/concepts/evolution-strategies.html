@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evolution Strategies | Games × AI Paper Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">Games × AI Paper Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a>
+    <a class="lang-switch" href="../../concepts/evolution-strategies.html" lang="zh-Hant">中文</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">Concept</span>
+  <h1>Evolution Strategies</h1>
+  <dl class="meta">
+    <dt>Aliases</dt><dd>ES, CMA-ES, evolutionary algorithm, black-box optimization</dd>
+    <dt>Last updated</dt><dd>2026-11-16</dd>
+    <dt>Sources</dt><dd>1 source</dd>
+  </dl>
+
+  <section>
+    <h2>One-line definition</h2>
+    <p class="lead">A family of optimization methods that imitate evolution: repeatedly generate many candidate parameter sets, evaluate each one, and produce the next generation from the candidates that did well.</p>
+  </section>
+
+  <section>
+    <h2>Explanation</h2>
+    <p>Most neural networks are trained with backpropagation, which requires a loss function whose gradient can be computed. Evolution strategies need no gradient. They only require a score for each parameter set, which is why they are also called black-box optimization.</p>
+    <p>The basic loop is: sample a batch of parameters from a probability distribution, score each one, adjust the distribution so that it moves toward the high-scoring ones, and repeat. CMA-ES is one widely used algorithm that also adapts the shape of the sampling distribution.</p>
+    <p>The advantages are simplicity, easy parallelization, and needing only the score of the final outcome, not the contribution of each step. The drawback is that efficiency drops as the number of parameters grows, so the method suits small models better.</p>
+  </section>
+
+  <section>
+    <h2>What each source says</h2>
+    <h3>World Models (2018)</h3>
+    <p><a href="../sources/2018-world-models.html">This paper</a> trains the agent's controller C with CMA-ES (p.4).</p>
+    <p>The architecture and this choice fit together: the complexity goes into the <a href="world-model.html">world model</a>, which is trained with backpropagation, and the controller is deliberately a linear model with only 867 parameters (p.5). The authors note that CMA-ES works well for problems with up to a few thousand parameters (p.4).</p>
+    <p>The benefits listed by the authors (p.12):</p>
+    <ul>
+    <li>Only the cumulative reward of a whole rollout is needed, not the entire history. This sidesteps the difficult credit assignment problem in reinforcement learning.</li>
+    <li>It is easy to parallelize: many candidate parameter sets can each play a rollout at the same time, and the scores are then gathered.</li>
+    </ul>
+    <p>In the experiments, multiple rollouts run in parallel on the CPU cores of a single machine (p.4). The authors also cite other work showing that evolution strategies are a viable alternative to traditional deep reinforcement learning methods (p.12).</p>
+  </section>
+
+  <section>
+    <h2>Related concepts</h2>
+    <ul>
+    <li><a href="world-model.html">World Model</a>: provides the representation the controller needs, which is what allows the controller to be small.</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>Written and maintained by AI following the rules in CLAUDE.md. These are reading notes; the original papers are authoritative.</p>
+</footer>
+</body>
+</html>

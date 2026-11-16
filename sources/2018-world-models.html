@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>World Models｜遊戲 × AI 論文 Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">遊戲 × AI 論文 Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">首頁</a>
+    <a class="lang-switch" href="../en/sources/2018-world-models.html" lang="en">English</a>
+  </nav>
+</header>
+<main class="page page-source">
+  <span class="tag tag-source">來源</span>
+  <h1>World Models</h1>
+  <dl class="meta">
+    <dt>作者</dt><dd>David Ha, Jürgen Schmidhuber</dd>
+    <dt>年份</dt><dd>2018</dd>
+    <dt>發表</dt><dd>arXiv 1803.10122v4</dd>
+    <dt>論文連結</dt><dd><a href="https://arxiv.org/abs/1803.10122">https://arxiv.org/abs/1803.10122</a></dd>
+    <dt>新增日期</dt><dd>2026-11-16</dd>
+  </dl>
+
+  <section>
+    <h2>一句話總結</h2>
+    <p class="lead">作者把代理人拆成視覺、記憶與控制器三部分，先用無監督方式學出一個能壓縮畫面並預測未來的世界模型，再用它訓練一個極小的控制器；這個代理人解決了賽車任務，還能完全在世界模型產生的「夢境」中訓練，再把學到的策略搬回真實的 Doom 環境。</p>
+  </section>
+
+  <section>
+    <h2>研究問題</h2>
+    <p>人類依靠腦中對世界的內在模型來做決定，而不是直接處理所有感官資訊（p.1）。強化學習的代理人同樣會受益於好的狀態表示與對未來的預測（p.2）。</p>
+    <p>實際的困難在於：大型神經網路表達能力強，但強化學習受限於功勞分配問題（credit assignment），很難直接訓練數百萬個參數，所以實務上多半只用小網路（p.2）。</p>
+    <p>論文要回答的是：能不能把代理人分成「大的世界模型」加「小的控制器」，讓前者用一般的深度學習方式有效率地訓練，後者只需在很小的搜尋空間裡學習任務？更進一步，能不能用學到的世界模型取代真實環境來訓練代理人（p.2、p.6）？</p>
+    <p>作者說明，本文的目的不是回顧整個領域，而是把 1990 到 2015 年間一系列結合 RNN 世界模型與控制器的想法，整理成一個可以實驗示範的簡化框架（p.2）。</p>
+  </section>
+
+  <section>
+    <h2>方法</h2>
+    <p>代理人由三個元件組成（p.2–3）：</p>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th>元件</th>
+    <th>做法</th>
+    <th>功能</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>視覺 V</td>
+    <td><a href="../concepts/variational-autoencoder.html">變分自編碼器</a></td>
+    <td>把每一張畫面壓縮成一個小的潛在向量 z</td>
+    </tr>
+    <tr>
+    <td>記憶 M</td>
+    <td>MDN-RNN</td>
+    <td>依目前的 z、動作與自身的隱藏狀態 h，預測下一個 z 的機率分布</td>
+    </tr>
+    <tr>
+    <td>控制器 C</td>
+    <td>單層線性模型</td>
+    <td>把 z 與 h 直接對應到動作</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <p>V 與 M 合起來就是<a href="../concepts/world-model.html">世界模型</a>。</p>
+    <p><strong>M 輸出機率分布而不是單一預測。</strong> 因為許多環境本身帶有隨機性，M 輸出的是高斯混合分布。取樣時可以用溫度參數 τ 調整不確定性的大小（p.3）。</p>
+    <p><strong>C 刻意做得很小。</strong> 作者希望模型的複雜度都放在 V 與 M，它們可以用反向傳播在 GPU 上有效率地訓練。C 的參數很少，因此可以改用<a href="../concepts/evolution-strategies.html">演化策略</a>（CMA-ES）來最佳化，只需要整場的累積獎勵（p.4）。賽車實驗中各元件的參數量為：V 有 4,348,547 個、M 有 422,368 個、C 只有 867 個（p.5）。</p>
+    <p><strong>訓練流程（賽車實驗，p.5）：</strong></p>
+    <ol>
+    <li>用隨機策略收集 10,000 場遊玩紀錄。</li>
+    <li>訓練 V，把畫面編碼成 32 維的 z。</li>
+    <li>訓練 M 預測下一個 z。</li>
+    <li>用 CMA-ES 找出讓累積獎勵最高的 C。</li>
+    </ol>
+    <p>世界模型完全不知道環境的獎勵，它的任務只是壓縮並預測畫面；只有 C 接觸得到獎勵（p.5）。V 與 M 各自在單一 GPU 上訓練不到一小時（p.4）。</p>
+    <p><strong>在夢境中訓練（Doom 實驗，p.7）。</strong> 這裡的 M 除了預測下一個 z，還預測代理人是否死亡。這樣 M 本身就構成一個完整的強化學習環境。控制器完全在這個由 M 產生的虛擬環境裡訓練，過程只在潛在空間進行，不需要產生真實畫面。訓練完再把策略搬回真實環境測試。</p>
+  </section>
+
+  <section>
+    <h2>主要結果</h2>
+    <p><strong>賽車（CarRacing-v0）。</strong> 這個任務的過關標準是連續 100 場平均達到 900 分（p.4）。100 場隨機測試的平均分數如下（Table 1，p.6）：</p>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th>方法</th>
+    <th>分數</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>A3C（連續動作）</td>
+    <td>591 ± 45</td>
+    </tr>
+    <tr>
+    <td>A3C（離散動作）</td>
+    <td>652 ± 10</td>
+    </tr>
+    <tr>
+    <td>排行榜上的最佳成績</td>
+    <td>838 ± 11</td>
+    </tr>
+    <tr>
+    <td>只用 V（控制器只看 z）</td>
+    <td>632 ± 251</td>
+    </tr>
+    <tr>
+    <td>只用 V，控制器加一層隱藏層</td>
+    <td>788 ± 141</td>
+    </tr>
+    <tr>
+    <td>完整世界模型（z 與 h）</td>
+    <td>906 ± 21</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <ul>
+    <li>作者表示，就他們所知這是第一個解決此任務的方法（p.6）。</li>
+    <li>只給控制器目前畫面的表示時，車子會搖晃並在急彎衝出賽道；加上 M 的隱藏狀態後行駛明顯穩定。作者的解釋是 h 帶有對未來的預測資訊，代理人不需要事先規劃就能憑它反射式地決定動作（p.5–6）。</li>
+    </ul>
+    <p><strong>Doom（VizDoom: Take Cover）。</strong> 過關標準是連續 100 場平均存活超過 750 個時間步，每場上限 2100 步（p.7）。</p>
+    <ul>
+    <li>完全在夢境中訓練的代理人，在虛擬環境中約存活 900 步，搬回真實環境後約 1100 步，遠高於過關標準（p.7–8）。</li>
+    <li>世界模型只從隨機遊玩的畫面學習，就學會模擬遊戲邏輯、敵人行為、物理與 3D 繪圖。例如它會阻止代理人穿過兩側的牆，也會判斷代理人是否被火球擊中（p.8）。</li>
+    </ul>
+    <p><strong>控制器會鑽世界模型的漏洞。</strong> 初期實驗中，代理人找到一種移動方式，讓虛擬環境裡的怪物永遠不發射火球。這在真實環境並不存在。原因是世界模型只是近似的機率模型，而控制器又能存取 M 的全部隱藏狀態。這類策略搬到真實環境會失敗，通常是因為它走到了偏離訓練分布、模型預測錯誤的狀態（p.8–9）。</p>
+    <p><strong>提高溫度可以緩解。</strong> 提高 τ 會讓夢境更隨機、更難，控制器就較難利用模型的缺陷。不同溫度下的分數（Table 2，p.10）：</p>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th>溫度 τ</th>
+    <th>虛擬環境分數</th>
+    <th>真實環境分數</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>0.10</td>
+    <td>2086 ± 140</td>
+    <td>193 ± 58</td>
+    </tr>
+    <tr>
+    <td>0.50</td>
+    <td>2060 ± 277</td>
+    <td>196 ± 50</td>
+    </tr>
+    <tr>
+    <td>1.00</td>
+    <td>1145 ± 690</td>
+    <td>868 ± 511</td>
+    </tr>
+    <tr>
+    <td>1.15</td>
+    <td>918 ± 546</td>
+    <td>1092 ± 556</td>
+    </tr>
+    <tr>
+    <td>1.30</td>
+    <td>732 ± 269</td>
+    <td>753 ± 139</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <p>作為對照，隨機策略在真實環境為 210 ± 108，排行榜最佳成績為 820 ± 58（p.10）。溫度太低時，夢境中的怪物根本不會發射火球，學到的策略在夢境中幾乎滿分，在真實環境卻比隨機策略還差；溫度太高則環境難到學不起來（p.9–10）。</p>
+  </section>
+
+  <section>
+    <h2>限制與未解問題</h2>
+    <ul>
+    <li>實驗的任務相對簡單，用隨機策略收集的資料就足以訓練世界模型。更複雜的環境需要反覆進行「探索、收集資料、更新模型」的迭代訓練，本文只提出流程，沒有實驗（p.10）。</li>
+    <li>V 是獨立訓練的，可能把與任務無關的細節編碼進去，反而漏掉重要的部分。例如它重現了 Doom 牆上不重要的磚塊花紋，卻沒有重現賽車環境中與任務相關的路面磚格（p.12）。</li>
+    <li>世界模型的容量有限。以 LSTM 為基礎的模型未必存得下所有紀錄，也有災難性遺忘的問題（p.12）。</li>
+    <li>模型是一步一步模擬未來，沒有像人類那樣的階層式規劃或抽象推理（p.13）。</li>
+    <li>在學到的模型中訓練，本質上就有被控制器鑽漏洞的風險；調整溫度只是在真實性與可被利用的程度之間取捨（p.9）。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>相關概念</h2>
+    <ul>
+    <li><a href="../concepts/world-model.html">世界模型（World Model）</a></li>
+    <li><a href="../concepts/variational-autoencoder.html">變分自編碼器（Variational Autoencoder）</a></li>
+    <li><a href="../concepts/evolution-strategies.html">演化策略（Evolution Strategies）</a></li>
+    <li><a href="../concepts/out-of-distribution-generalization.html">分布外泛化（Out-of-Distribution Generalization）</a></li>
+    <li><a href="../concepts/game-rule-understanding.html">遊戲規則理解（Game Rule Understanding）</a></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>與其他來源的關係</h2>
+    <ul>
+    <li><a href="2025-llm-game-rule-understanding.html">LLM Game Rule Understanding through Out-of-Distribution Fine-Tuning（2025）</a>：兩篇都要求模型「給定目前狀態與動作，預測下一個狀態」。那一篇把規則以文字明確交給 LLM，並逐題檢查答案；這一篇不提供任何規則，讓神經網路只從畫面學出遊戲如何運作。兩篇也都碰到分布外的問題：那一篇是規則差異太大時微調無效，這一篇是控制器走到訓練資料沒涵蓋的狀態時世界模型會出錯。這一篇發表在前，沒有引用關係，以上是本 Wiki 的整理。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>我的筆記</h2>
+    <div class="notes">
+      <p>（擁有者尚未填寫）</p>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>由 AI 依照 CLAUDE.md 的規則撰寫與維護。內容為論文閱讀筆記，請以原論文為準。</p>
+</footer>
+</body>
+</html>

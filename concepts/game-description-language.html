@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>遊戲描述語言（Game Description Language）｜遊戲 × AI 論文 Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">遊戲 × AI 論文 Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">首頁</a>
+    <a class="lang-switch" href="../en/concepts/game-description-language.html" lang="en">English</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">概念</span>
+  <h1>遊戲描述語言（Game Description Language）</h1>
+  <dl class="meta">
+    <dt>別名</dt><dd>GDL、SGDL、Solitaire GDL</dd>
+    <dt>最後更新</dt><dd>2026-11-16</dd>
+    <dt>來源數量</dt><dd>1 個來源</dd>
+  </dl>
+
+  <section>
+    <h2>一句話定義</h2>
+    <p class="lead">一種用來精確描述遊戲規則的形式化語言，讓程式可以直接讀取規則並模擬遊戲。</p>
+  </section>
+
+  <section>
+    <h2>說明</h2>
+    <p>用自然語言寫的規則容易有歧義，程式也無法直接執行。遊戲描述語言（GDL）把規則寫成固定格式，例如有哪些物件、初始狀態、可以做哪些動作、每個動作的條件，以及勝利條件。</p>
+    <p>有了 GDL，同一套程式就能模擬許多不同的遊戲，只要換一份描述檔。這對研究很有用：可以大量產生規則的變體、自動驗證某個動作是否合法、算出正確的下一個狀態，進而自動產生附帶標準答案的題目。</p>
+    <p>GDL 的表達範圍通常是設計上的取捨：語言越簡單越容易使用，但能描述的遊戲種類也越少。</p>
+  </section>
+
+  <section>
+    <h2>各來源怎麼說</h2>
+    <h3>LLM Game Rule Understanding through Out-of-Distribution Fine-Tuning（2025）</h3>
+    <p><a href="../sources/2025-llm-game-rule-understanding.html">這篇論文</a>提出接龍專用的 SGDL（Solitaire GDL），目標是在語言保持簡單的前提下支援大量接龍變體（p.4）。一份 SGDL 檔案有五個區段（p.4–5）：</p>
+    <ul>
+    <li><code>$cards</code>：使用幾副牌、有哪些花色與牌。</li>
+    <li><code>$initial</code>：有哪些牌堆、初始如何發牌、牌面朝上或朝下。</li>
+    <li><code>$actions</code>：可以做的動作（移動一張牌、移動一疊牌、抽牌）與各自的合法條件。</li>
+    <li><code>$auto</code>：條件成立時自動執行的動作（選用）。</li>
+    <li><code>$win</code>：勝利條件。</li>
+    </ul>
+    <p>條件可以用 And 與 Or 組合成樹狀結構（p.5）。</p>
+    <p>值得注意的是，SGDL 只用來定義遊戲與產生資料，並不直接給 LLM 看。框架會把 SGDL 轉成自然語言的規則描述再交給模型，理由是自然語言更容易泛化到其他遊戲，而且先前研究顯示 LLM 對自然語言規則的理解較好（p.4）。</p>
+  </section>
+
+  <section>
+    <h2>相關概念</h2>
+    <ul>
+    <li><a href="game-rule-understanding.html">遊戲規則理解（Game Rule Understanding）</a>：GDL 讓這項能力可以被大規模、自動化地測試。</li>
+    <li><a href="evaluation-benchmark.html">評測基準（Evaluation Benchmark）</a>：GDL 讓題目與標準答案可以自動產生。</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>由 AI 依照 CLAUDE.md 的規則撰寫與維護。內容為論文閱讀筆記，請以原論文為準。</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>世界模型（World Model）｜遊戲 × AI 論文 Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">遊戲 × AI 論文 Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">首頁</a>
+    <a class="lang-switch" href="../en/concepts/world-model.html" lang="en">English</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">概念</span>
+  <h1>世界模型（World Model）</h1>
+  <dl class="meta">
+    <dt>別名</dt><dd>world model、環境模型、dynamics model、動態模型、基於模型的強化學習、model-based RL、MDN-RNN</dd>
+    <dt>最後更新</dt><dd>2026-11-16</dd>
+    <dt>來源數量</dt><dd>1 個來源</dd>
+  </dl>
+
+  <section>
+    <h2>一句話定義</h2>
+    <p class="lead">代理人內部對環境的模型，能根據目前的狀態與動作預測接下來會發生什麼。</p>
+  </section>
+
+  <section>
+    <h2>說明</h2>
+    <p>強化學習大致有兩條路線。一條不建立環境的模型，直接從嘗試錯誤中學習怎麼行動。另一條先學一個環境的模型，再利用它來規劃或訓練，稱為基於模型的強化學習（model-based RL）。</p>
+    <p>世界模型屬於後者。它通常做兩件事：把高維度的觀察（例如畫面）壓縮成精簡的表示，以及預測這個表示如何隨動作變化。</p>
+    <p>有了世界模型，代理人可以在「想像」中練習，不必每一步都與真實環境互動。當真實互動很慢、很貴或有風險時，這特別有價值。</p>
+    <p>主要的風險是模型不可能完全準確。如果代理人在模型裡學到的做法其實是利用了模型的錯誤，搬到真實環境就會失效。</p>
+  </section>
+
+  <section>
+    <h2>各來源怎麼說</h2>
+    <h3>World Models（2018）</h3>
+    <p><a href="../sources/2018-world-models.html">這篇論文</a>的世界模型由兩部分組成（p.2–3）：</p>
+    <ul>
+    <li><strong>視覺 V</strong>：用<a href="variational-autoencoder.html">變分自編碼器</a>把畫面壓縮成潛在向量 z。</li>
+    <li><strong>記憶 M</strong>：用 MDN-RNN 預測下一個 z 的機率分布。輸出分布而非單一數值，是為了處理環境的隨機性。</li>
+    </ul>
+    <p>世界模型以無監督方式訓練，不接觸獎勵，只負責壓縮與預測（p.5）。論文示範了它的兩種用途：</p>
+    <ul>
+    <li><strong>提供特徵</strong>。把 z 與 M 的隱藏狀態 h 交給一個很小的控制器。賽車任務中，只用 z 得到 632 ± 251 分，加上 h 後達到 906 ± 21 分（p.6）。</li>
+    <li><strong>取代真實環境</strong>。Doom 任務中，控制器完全在世界模型產生的「夢境」裡訓練，搬回真實環境後約存活 1100 步，超過 750 步的過關標準（p.7–8）。</li>
+    </ul>
+    <p>論文也詳細記錄了風險：控制器會找到利用模型缺陷的策略，例如讓夢境裡的怪物永遠不發射火球（p.8）。作者的對策是讓 M 輸出機率分布，並在取樣時提高溫度 τ 使夢境更難、更隨機。溫度是在真實性與可被利用的程度之間的取捨（p.9）。</p>
+    <p>作者指出的限制包括模型容量有限，以及只能一步一步模擬、缺乏階層式規劃（p.12–13）。</p>
+  </section>
+
+  <section>
+    <h2>相關概念</h2>
+    <ul>
+    <li><a href="variational-autoencoder.html">變分自編碼器（Variational Autoencoder）</a>：世界模型中負責壓縮畫面的部分。</li>
+    <li><a href="evolution-strategies.html">演化策略（Evolution Strategies）</a>：這裡用來訓練控制器的方法。</li>
+    <li><a href="out-of-distribution-generalization.html">分布外泛化（Out-of-Distribution Generalization）</a>：世界模型在訓練資料沒涵蓋的狀態會出錯。</li>
+    <li><a href="game-rule-understanding.html">遊戲規則理解（Game Rule Understanding）</a>：世界模型從畫面隱含地學到遊戲如何運作。</li>
+    <li>注意：這篇論文的「記憶 M」指神經網路的內部狀態，與<a href="agent-memory.html">代理人記憶（Agent Memory）</a>把經驗寫成文字保存是不同的東西。</li>
+    <li>注意：世界模型模仿的是既有的遊戲，與依描述創造新遊戲的<a href="game-generation.html">遊戲生成（Game Generation）</a>不同。</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>由 AI 依照 CLAUDE.md 的規則撰寫與維護。內容為論文閱讀筆記，請以原論文為準。</p>
+</footer>
+</body>
+</html>

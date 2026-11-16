@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>變分自編碼器（Variational Autoencoder）｜遊戲 × AI 論文 Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">遊戲 × AI 論文 Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">首頁</a>
+    <a class="lang-switch" href="../en/concepts/variational-autoencoder.html" lang="en">English</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">概念</span>
+  <h1>變分自編碼器（Variational Autoencoder）</h1>
+  <dl class="meta">
+    <dt>別名</dt><dd>VAE、自編碼器、autoencoder、潛在向量、latent vector、潛在空間、latent space</dd>
+    <dt>最後更新</dt><dd>2026-11-16</dd>
+    <dt>來源數量</dt><dd>1 個來源</dd>
+  </dl>
+
+  <section>
+    <h2>一句話定義</h2>
+    <p class="lead">一種神經網路，學習把輸入壓縮成一個小的潛在向量，並能從這個向量重建出近似的原始輸入。</p>
+  </section>
+
+  <section>
+    <h2>說明</h2>
+    <p>自編碼器有兩個部分：編碼器把輸入（例如一張圖）壓縮成一個維度很低的向量，解碼器再從這個向量還原出輸入。訓練目標是讓還原結果盡量接近原本的輸入。因為中間的向量很小，網路被迫只保留最重要的資訊。</p>
+    <p>變分自編碼器（VAE）多加了一個要求：潛在向量要符合一個簡單的機率分布。這讓潛在空間比較平滑、有規律，相近的向量會解碼成相似的結果，也可以從分布中取樣來產生新的內容。</p>
+    <p>VAE 的訓練不需要標籤，屬於無監督學習。它常被用來把高維度的資料（例如影像）轉成精簡的表示，讓後續的模型更容易處理。壓縮是有損的，細節會遺失。</p>
+  </section>
+
+  <section>
+    <h2>各來源怎麼說</h2>
+    <h3>World Models（2018）</h3>
+    <p><a href="../sources/2018-world-models.html">這篇論文</a>用 VAE 作為代理人的視覺元件 V，把每一張遊戲畫面壓縮成潛在向量 z（p.2–3）。賽車實驗的 z 是 32 維，Doom 實驗是 64 維（p.5、p.7）。</p>
+    <ul>
+    <li>訓練資料來自隨機策略收集的 10,000 場遊玩紀錄，訓練目標是讓重建的畫面接近原畫面（p.4）。</li>
+    <li>作者指出，壓縮雖然會遺失細節，z 仍然保留了每張畫面的要點（p.5）。</li>
+    <li>V 與預測模型 M 分開訓練。作者說原則上可以一起端到端訓練，但分開比較實際，結果也夠好（p.4）。</li>
+    </ul>
+    <p>論文也指出這種做法的限制：VAE 是獨立訓練的，不知道哪些資訊對任務有用。它重現了 Doom 牆上不重要的磚塊花紋，卻沒有重現賽車環境中與任務相關的路面磚格。若與預測獎勵的模型一起訓練可以改善，但代價是換新任務時可能要重新訓練（p.12）。</p>
+  </section>
+
+  <section>
+    <h2>相關概念</h2>
+    <ul>
+    <li><a href="world-model.html">世界模型（World Model）</a>：VAE 在這裡是世界模型的視覺部分。</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>由 AI 依照 CLAUDE.md 的規則撰寫與維護。內容為論文閱讀筆記，請以原論文為準。</p>
+</footer>
+</body>
+</html>

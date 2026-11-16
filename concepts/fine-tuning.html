@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>微調（Fine-Tuning）｜遊戲 × AI 論文 Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">遊戲 × AI 論文 Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">首頁</a>
+    <a class="lang-switch" href="../en/concepts/fine-tuning.html" lang="en">English</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">概念</span>
+  <h1>微調（Fine-Tuning）</h1>
+  <dl class="meta">
+    <dt>別名</dt><dd>fine-tune、finetuning、監督式微調</dd>
+    <dt>最後更新</dt><dd>2026-11-16</dd>
+    <dt>來源數量</dt><dd>1 個來源</dd>
+  </dl>
+
+  <section>
+    <h2>一句話定義</h2>
+    <p class="lead">拿一個已經預訓練好的模型，用特定任務的資料繼續訓練，讓它在該任務上表現更好。</p>
+  </section>
+
+  <section>
+    <h2>說明</h2>
+    <p>預訓練模型已經具備廣泛的一般知識，微調是在這個基礎上用少量的任務資料調整參數，成本遠低於從頭訓練。</p>
+    <p>微調的主要風險是過度專精：模型在訓練過的資料類型上進步，卻可能失去原本的通用性。所以評估微調時，只看訓練過的任務並不夠，還要看沒訓練過的相近任務有沒有跟著進步或退步。</p>
+    <p>訓練資料的設計會影響結果，例如樣本數量、涵蓋的類型有多廣，以及答案是否附帶推理過程。</p>
+  </section>
+
+  <section>
+    <h2>各來源怎麼說</h2>
+    <h3>LLM Game Rule Understanding through Out-of-Distribution Fine-Tuning（2025）</h3>
+    <p><a href="../sources/2025-llm-game-rule-understanding.html">這篇論文</a>用接龍的遊戲推進題目微調 GPT-4o-mini，並比較四種多樣性不同的訓練集（ft0 到 ft3）（p.7）。發現如下：</p>
+    <ul>
+    <li><strong>少量樣本就有效。</strong> 單一遊戲 200 個樣本就讓 Blind Alley's 的下一盤面準確率從 0.14 升到 0.82（p.9）。</li>
+    <li><strong>樣本不是越多越好。</strong> 100、200、300 三種樣本數中，200 的效果最好（p.8）。</li>
+    <li><strong>多樣性的取捨。</strong> 訓練的變體越多，每個變體分到的樣本越少，分布內表現可能下降，但分布外表現通常提升（p.9）。</li>
+    <li><strong>附上推理過程有幫助。</strong> 訓練資料含逐步的合法性解釋，作者認為這有助於合法性判斷的泛化；下一盤面沒有對應的解釋，泛化效果就較不穩定（p.8）。</li>
+    <li><strong>小模型可以追上大模型。</strong> 微調後的 GPT-4o-mini 在多數情況下追上或超越未微調的 DeepSeek-v3 與 Llama 3.3 70B（p.8）。</li>
+    </ul>
+    <p>作者也說明，微調後的表現仍不令人滿意（p.9）。</p>
+  </section>
+
+  <section>
+    <h2>相關概念</h2>
+    <ul>
+    <li><a href="out-of-distribution-generalization.html">分布外泛化（Out-of-Distribution Generalization）</a>：檢驗微調是否過度專精的方式。</li>
+    <li><a href="game-rule-understanding.html">遊戲規則理解（Game Rule Understanding）</a>：這裡微調要改善的能力。</li>
+    <li><a href="agent-memory.html">代理人記憶（Agent Memory）</a>：另一種讓系統從經驗進步的方式，差別在於不改變模型參數。</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>由 AI 依照 CLAUDE.md 的規則撰寫與維護。內容為論文閱讀筆記，請以原論文為準。</p>
+</footer>
+</body>
+</html>

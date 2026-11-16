@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>遊戲 × AI 論文 Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="index.html">遊戲 × AI 論文 Wiki</a>
+  <nav class="site-nav">
+    <a href="index.html">首頁</a>
+    <a class="lang-switch" href="en/index.html" lang="en">English</a>
+  </nav>
+</header>
+<main class="home">
+  <section class="hero">
+    <h1>遊戲 × AI 論文 Wiki</h1>
+    <p>一個以 LLM Wiki 方式維護的論文知識庫，主題是 AI 如何生成、理解與遊玩遊戲。</p>
+    <p>每讀一篇論文，就新增一張「來源」頁，並更新相關的「概念」頁，讓知識互相連結、持續累積。</p>
+  </section>
+
+  <h2 class="section-title">來源</h2>
+  <p class="section-note">一篇論文一頁：研究問題、方法、主要結果與限制。</p>
+  <div class="cards">
+    <a class="card card-source" href="sources/2025-llm-game-rule-understanding.html">
+      <span class="tag tag-source">來源</span>
+      <h3>LLM Game Rule Understanding through Out-of-Distribution Fine-Tuning</h3>
+      <p class="card-meta">Bateni, Pratt &amp; Whitehead · 2025</p>
+      <p>作者用自訂的接龍遊戲描述語言自動產生「這一步合不合法、下一個盤面是什麼」的題庫，發現少量微調就能提升 GPT-4o-mini 對規則的理解，而且能泛化到沒訓練過的接龍變體；但規則差異太大時，微調幾乎沒有幫助。</p>
+    </a>
+    <a class="card card-source" href="sources/2026-gui-agents-continual-game-generation.html">
+      <span class="tag tag-source">來源</span>
+      <h3>GUI Agents for Continual Game Generation</h3>
+      <p class="card-meta">Huang et al. · 2026</p>
+      <p>作者主張遊戲生成需要一個「玩家」，讓 GUI 代理人實際去玩生成出來的網頁遊戲：既用它建立評測基準 PlaytestArena，也把它放進生成流程成為 Play2Code，使平均準則通過率達到 66.8%，高於單次生成的 29.7% 與不試玩的代理式流程的 52.2%。</p>
+    </a>
+    <a class="card card-source" href="sources/2018-world-models.html">
+      <span class="tag tag-source">來源</span>
+      <h3>World Models</h3>
+      <p class="card-meta">Ha &amp; Schmidhuber · 2018</p>
+      <p>作者把代理人拆成視覺、記憶與控制器三部分，先用無監督方式學出一個能壓縮畫面並預測未來的世界模型，再用它訓練一個極小的控制器；這個代理人解決了賽車任務，還能完全在世界模型產生的「夢境」中訓練，再把學到的策略搬回真實的 Doom 環境。</p>
+    </a>
+    <!-- 新的來源卡片加在這行上面 -->
+  </div>
+
+  <h2 class="section-title">概念</h2>
+  <p class="section-note">一個概念一頁：整合不同論文對同一個想法的說法。</p>
+  <div class="cards">
+    <a class="card card-concept" href="concepts/game-rule-understanding.html">
+      <span class="tag tag-concept">概念</span>
+      <h3>遊戲規則理解（Game Rule Understanding）</h3>
+      <p class="card-meta">2 個來源</p>
+      <p>模型能否正確掌握一套遊戲規則，並用它來判斷、預測、遊玩，甚至評估與修改規則本身。</p>
+    </a>
+    <a class="card card-concept" href="concepts/out-of-distribution-generalization.html">
+      <span class="tag tag-concept">概念</span>
+      <h3>分布外泛化（Out-of-Distribution Generalization）</h3>
+      <p class="card-meta">2 個來源</p>
+      <p>模型在與訓練資料性質不同的資料上，仍然能維持表現的能力。</p>
+    </a>
+    <a class="card card-concept" href="concepts/fine-tuning.html">
+      <span class="tag tag-concept">概念</span>
+      <h3>微調（Fine-Tuning）</h3>
+      <p class="card-meta">1 個來源</p>
+      <p>拿一個已經預訓練好的模型，用特定任務的資料繼續訓練，讓它在該任務上表現更好。</p>
+    </a>
+    <a class="card card-concept" href="concepts/game-description-language.html">
+      <span class="tag tag-concept">概念</span>
+      <h3>遊戲描述語言（Game Description Language）</h3>
+      <p class="card-meta">1 個來源</p>
+      <p>一種用來精確描述遊戲規則的形式化語言，讓程式可以直接讀取規則並模擬遊戲。</p>
+    </a>
+    <a class="card card-concept" href="concepts/gui-agent.html">
+      <span class="tag tag-concept">概念</span>
+      <h3>GUI 代理人（GUI Agent）</h3>
+      <p class="card-meta">1 個來源</p>
+      <p>透過觀看畫面並用滑鼠與鍵盤操作圖形介面的 AI 代理人，使用軟體的方式和人一樣。</p>
+    </a>
+    <a class="card card-concept" href="concepts/playtesting.html">
+      <span class="tag tag-concept">概念</span>
+      <h3>遊戲測試（Playtesting）</h3>
+      <p class="card-meta">1 個來源</p>
+      <p>藉由實際遊玩來找出遊戲的問題，檢查的是玩起來的體驗，而不是程式碼本身。</p>
+    </a>
+    <a class="card card-concept" href="concepts/game-generation.html">
+      <span class="tag tag-concept">概念</span>
+      <h3>遊戲生成（Game Generation）</h3>
+      <p class="card-meta">2 個來源</p>
+      <p>讓 AI 依照自然語言的描述，自動產生遊戲或遊戲的一部分，例如程式碼、規則或關卡。</p>
+    </a>
+    <a class="card card-concept" href="concepts/agent-memory.html">
+      <span class="tag tag-concept">概念</span>
+      <h3>代理人記憶（Agent Memory）</h3>
+      <p class="card-meta">1 個來源</p>
+      <p>讓 AI 代理人把過去的經驗保存下來，並在之後的步驟或任務中取用的機制。</p>
+    </a>
+    <a class="card card-concept" href="concepts/evaluation-benchmark.html">
+      <span class="tag tag-concept">概念</span>
+      <h3>評測基準（Evaluation Benchmark）</h3>
+      <p class="card-meta">2 個來源</p>
+      <p>一組固定的任務加上評分方法，用來以可重複的方式衡量某種能力或某種產出的品質。</p>
+    </a>
+    <a class="card card-concept" href="concepts/world-model.html">
+      <span class="tag tag-concept">概念</span>
+      <h3>世界模型（World Model）</h3>
+      <p class="card-meta">1 個來源</p>
+      <p>代理人內部對環境的模型，能根據目前的狀態與動作預測接下來會發生什麼。</p>
+    </a>
+    <a class="card card-concept" href="concepts/variational-autoencoder.html">
+      <span class="tag tag-concept">概念</span>
+      <h3>變分自編碼器（Variational Autoencoder）</h3>
+      <p class="card-meta">1 個來源</p>
+      <p>一種神經網路，學習把輸入壓縮成一個小的潛在向量，並能從這個向量重建出近似的原始輸入。</p>
+    </a>
+    <a class="card card-concept" href="concepts/evolution-strategies.html">
+      <span class="tag tag-concept">概念</span>
+      <h3>演化策略（Evolution Strategies）</h3>
+      <p class="card-meta">1 個來源</p>
+      <p>一類模仿演化的最佳化方法：反覆產生多組候選參數，評估每一組的表現，再根據表現好的候選產生下一代。</p>
+    </a>
+    <!-- 新的概念卡片加在這行上面 -->
+  </div>
+</main>
+<footer class="site-footer">
+  <p>由 AI 依照 CLAUDE.md 的規則撰寫與維護。內容為論文閱讀筆記，請以原論文為準。</p>
+</footer>
+</body>
+</html>

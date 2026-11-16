@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evaluation Benchmark | Games × AI Paper Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">Games × AI Paper Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a>
+    <a class="lang-switch" href="../../concepts/evaluation-benchmark.html" lang="zh-Hant">中文</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">Concept</span>
+  <h1>Evaluation Benchmark</h1>
+  <dl class="meta">
+    <dt>Aliases</dt><dd>benchmark, evaluation, rubric, rubric-based evaluation</dd>
+    <dt>Last updated</dt><dd>2026-11-16</dd>
+    <dt>Sources</dt><dd>2 sources</dd>
+  </dl>
+
+  <section>
+    <h2>One-line definition</h2>
+    <p class="lead">A fixed set of tasks plus a scoring method, used to measure an ability or the quality of an output in a repeatable way.</p>
+  </section>
+
+  <section>
+    <h2>Explanation</h2>
+    <p>Designing an evaluation means answering three questions: what is being evaluated, where the ground truth comes from, and how the score is computed.</p>
+    <p>Ground truth comes from roughly three places. The first is computation by a program, which is exact and scales well but only suits questions with a clear right answer. The second is human annotation, which can handle more subjective judgments but is costly. The third is another model acting as judge, which scales but requires separate validation of the judge's own reliability.</p>
+    <p>A good evaluation must also avoid a common problem: if the system under test saw the evaluation content during training or development, the score no longer means what it should.</p>
+  </section>
+
+  <section>
+    <h2>What each source says</h2>
+    <h3>LLM Game Rule Understanding through Out-of-Distribution Fine-Tuning (2025)</h3>
+    <p><a href="../sources/2025-llm-game-rule-understanding.html">This paper</a> evaluates <strong>a model's ability</strong>: whether an LLM understands game rules.</p>
+    <ul>
+    <li><strong>Task</strong>: given a Solitaire state and an action, decide whether it is legal and output the next state (p.2).</li>
+    <li><strong>Ground truth</strong>: computed automatically by the simulation framework. Because rules are defined in a <a href="game-description-language.html">game description language</a>, the framework can validate any action and execute it to get the next state (p.7).</li>
+    <li><strong>Score</strong>: legal accuracy and next-state accuracy (p.8).</li>
+    <li><strong>Scale</strong>: 6 test variants with 500 questions each (p.7).</li>
+    <li><strong>Distinctive feature</strong>: test sets are split by their relation to the training set into in-distribution, in-family, and out-of-distribution, to measure <a href="out-of-distribution-generalization.html">generalization</a> (p.7).</li>
+    </ul>
+    <h3>GUI Agents for Continual Game Generation (2026)</h3>
+    <p><a href="../sources/2026-gui-agents-continual-game-generation.html">This paper</a> evaluates <strong>the quality of an output</strong>: whether a generated game behaves as intended. It builds PlaytestArena.</p>
+    <ul>
+    <li><strong>Task</strong>: 200 web game generation prompts across 8 genres (p.4).</li>
+    <li><strong>Ground truth</strong>: there is no single correct answer. Instead, human experts write rubrics, 1,548 observable expected behaviors in total (p.4).</li>
+    <li><strong>Score</strong>: a GPT-5.5 <a href="gui-agent.html">GUI agent</a> plays the game and judges each criterion; the score is the fraction passed (p.4).</li>
+    <li><strong>Validating the judge</strong>: agreement with human annotation is 87.9% (κ = 0.66), close to the 91.4% (κ = 0.68) between humans. With two other models as judges, the ordering of methods stays the same (p.4–5).</li>
+    <li><strong>Avoiding leakage</strong>: the playtester inside the generation loop never sees the rubric and does not produce the final score (p.5).</li>
+    </ul>
+    <h3>Comparing the sources</h3>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th></th>
+    <th>2025 rule understanding</th>
+    <th>2026 PlaytestArena</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>What is evaluated</td>
+    <td>A model's ability</td>
+    <td>Generated games</td>
+    </tr>
+    <tr>
+    <td>Ground truth</td>
+    <td>Computed by a simulator</td>
+    <td>Human-written criteria</td>
+    </tr>
+    <tr>
+    <td>How it is judged</td>
+    <td>Compared with the ground truth</td>
+    <td>Judged by an agent after playing</td>
+    </tr>
+    <tr>
+    <td>Where questions come from</td>
+    <td>Generated by a program</td>
+    <td>Written by human experts</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <p>The first has questions with clear right answers and can be fully automated. In the second, quality is only known after playing, so it needs a judge that can play, and the judge's reliability has to be validated as well. Neither paper cites the other; this comparison is this wiki's own synthesis.</p>
+  </section>
+
+  <section>
+    <h2>Related concepts</h2>
+    <ul>
+    <li><a href="game-rule-understanding.html">Game Rule Understanding</a>: the ability evaluated by the first paper.</li>
+    <li><a href="playtesting.html">Playtesting</a>: the method the second paper uses to evaluate.</li>
+    <li><a href="game-description-language.html">Game Description Language</a>: the tool that lets questions and answers be generated automatically.</li>
+    <li><a href="out-of-distribution-generalization.html">Out-of-Distribution Generalization</a>: one way of splitting test sets.</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>Written and maintained by AI following the rules in CLAUDE.md. These are reading notes; the original papers are authoritative.</p>
+</footer>
+</body>
+</html>

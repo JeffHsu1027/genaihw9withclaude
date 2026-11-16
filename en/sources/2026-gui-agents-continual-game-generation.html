@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GUI Agents for Continual Game Generation | Games × AI Paper Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">Games × AI Paper Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a>
+    <a class="lang-switch" href="../../sources/2026-gui-agents-continual-game-generation.html" lang="zh-Hant">中文</a>
+  </nav>
+</header>
+<main class="page page-source">
+  <span class="tag tag-source">Source</span>
+  <h1>GUI Agents for Continual Game Generation</h1>
+  <dl class="meta">
+    <dt>Authors</dt><dd>Yixu Huang et al.</dd>
+    <dt>Year</dt><dd>2026</dd>
+    <dt>Venue</dt><dd>arXiv 2605.28258v2</dd>
+    <dt>Paper link</dt><dd><a href="https://arxiv.org/abs/2605.28258">https://arxiv.org/abs/2605.28258</a></dd>
+    <dt>Added</dt><dd>2026-11-16</dd>
+  </dl>
+
+  <section>
+    <h2>One-line summary</h2>
+    <p class="lead">The authors argue that game generation needs a "player", and let GUI agents actually play generated web games: they use one to build the PlaytestArena benchmark, and put another inside the generation loop as Play2Code, which reaches an average rubric pass rate of 66.8%, above 29.7% for single-pass generation and 52.2% for an agentic pipeline that does not play.</p>
+  </section>
+
+  <section>
+    <h2>Research question</h2>
+    <p>Generating a game is not the same as making a playable one. A game can compile, run, and pass every test while still being broken in ways static analysis cannot reveal, such as a key press with no response, a sprite that does not render, or a win condition that never triggers. The game industry has therefore long relied on human playtesters, but LLMs now produce games faster than humans can play them (p.1).</p>
+    <p>The paper asks three questions (p.2):</p>
+    <ol>
+    <li>How does the nature of games change what counts as "better"?</li>
+    <li>What should a "player" look like, and where should it sit in the process?</li>
+    <li>How does such a "player" drive game generation, and does it drive it where a human would?</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Method</h2>
+    <p><strong>First, check whether GUI agents can playtest.</strong> The authors test three models on 20 web games (split into about 120 levels) and recruit three human players under matched conditions as a reference (p.3).</p>
+    <p><strong>PlaytestArena: the benchmark.</strong> It contains 200 web game generation tasks across 8 genres, with games delivered as self-contained HTML/CSS/JS bundles (p.4). Each task has two parts:</p>
+    <ul>
+    <li>A generation prompt written by human experts, 131 tokens on average, specifying gameplay, win and loss conditions, player input, and feedback behavior.</li>
+    <li>A rubric written by human experts, where each criterion states one observable expected behavior, for example "the spawned enemies move toward the player's position". There are 1,548 criteria in total, 5 to 17 per game with a mean of 7.7, covering five dimensions: mechanics, controls, progression, interface, and visual feedback (p.4, p.14).</li>
+    </ul>
+    <p>Scoring is done by an independent GPT-5.5 GUI judge. It loads the game in a browser, plays it through clicks and keys, and gives each criterion a pass or fail based on what it observes. The score is the fraction of criteria passed (p.4).</p>
+    <p><strong>Play2Code: putting playtesting inside generation.</strong> Two agents work around a shared runtime (p.5):</p>
+    <ul>
+    <li>The <strong>Game Agent</strong> writes, debugs, and patches the code.</li>
+    <li>The <strong>GUI playtester</strong> plays the current build in a browser, with no access to the code or the rubric. Afterwards it produces two artifacts: a play summary, and a fix list that maps observed failures to code-level changes (p.5–6).</li>
+    </ul>
+    <p>The Game Agent treats this report as advice, not instruction, and decides for itself which fixes to act on. The loop ends when the playtester judges that the build meets the intent of the prompt, or when the maximum number of rounds is reached (p.6). The maximum is 5 rounds; the average is 3.24, and 93.5% of tasks end early (p.18).</p>
+    <p><strong>Three-layer memory.</strong> Memory is organized by lifecycle (in-task or cross-task) and scope into episode, skill, and world memory, so that experience accumulates across rounds and tasks (p.6). See <a href="../concepts/agent-memory.html">Agent Memory</a>.</p>
+    <p><strong>Baselines.</strong> Direct LLM emits the whole game in a single pass. OpenGame is an agentic pipeline that iteratively builds, runs, and inspects the game at the syntactic and compiling level, but does not play it. Each method is run with GPT-5.4, Claude Sonnet 4.6, and Kimi K2.5 as backbones (p.6).</p>
+  </section>
+
+  <section>
+    <h2>Key results</h2>
+    <p><strong>GUI agents can playtest, but still fall short of humans.</strong> Level pass rate within 20 attempts: 0.82 for GPT-5.4, 0.79 for Sonnet 4.6, 0.72 for Kimi K2.5, and 0.92 for humans (Table 1, p.3).</p>
+    <p><strong>Playtesting brings a clear improvement.</strong> Average rubric pass rate (%) on PlaytestArena (Table 3, p.6):</p>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th>Backbone</th>
+    <th>Direct LLM</th>
+    <th>OpenGame</th>
+    <th>Play2Code</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>GPT-5.4</td>
+    <td>31.6</td>
+    <td>55.7</td>
+    <td>72.3</td>
+    </tr>
+    <tr>
+    <td>Sonnet 4.6</td>
+    <td>29.7</td>
+    <td>55.3</td>
+    <td>71.1</td>
+    </tr>
+    <tr>
+    <td>Kimi K2.5</td>
+    <td>27.8</td>
+    <td>45.5</td>
+    <td>56.9</td>
+    </tr>
+    <tr>
+    <td>Average of the three</td>
+    <td>29.7</td>
+    <td>52.2</td>
+    <td>66.8</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <ul>
+    <li>The comparison with OpenGame is the most telling: it already builds and inspects iteratively and lacks only playtesting. Failures such as unresponsive controls, missing state transitions, or win conditions that never trigger are invisible at the code and compilation level and surface only during play (p.6).</li>
+    <li>Scores rise monotonically across rounds. Early rounds mostly expose basic interaction failures, while later rounds address finer issues such as visual effects (p.7).</li>
+    </ul>
+    <p><strong>Ablations (GPT-5.4 backbone, p.18–19):</strong></p>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th>Setting</th>
+    <th>Rubric pass rate</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>Full Play2Code</td>
+    <td>72.3</td>
+    </tr>
+    <tr>
+    <td>No memory at all</td>
+    <td>64.1</td>
+    </tr>
+    <tr>
+    <td>GUI playtester removed; the Game Agent verifies its own code</td>
+    <td>58.7</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <p>Removing the GUI playtester causes a larger drop than removing any single memory layer, so the authors regard feedback from actual play as the most impactful component (p.19).</p>
+    <p><strong>Is the judge reliable?</strong> At the criterion level, the GPT-5.5 judge agrees with humans 87.9% of the time (κ = 0.66), while humans agree with each other 91.4% of the time (κ = 0.68). With Claude Opus 4.8 and Gemini 3.5 Flash as judges, the ordering of the three methods stays the same (p.4–5).</p>
+    <p><strong>Comparison with human playtesters.</strong></p>
+    <ul>
+    <li>Every action, observation, and diagnosis of the GUI agent is logged, so a failure can be traced back to a concrete sequence of frames; a human report is a summary written afterwards (p.7).</li>
+    <li>On 50 moderate-gain games, the GUI agent approaches human playtesters in driving refinement (p.7).</li>
+    <li>Different models notice different things: GPT-5.4 concentrates on functionality bugs and control responsiveness, Sonnet 4.6 is more even and also attends to pacing and difficulty balance, and nearly half of Kimi K2.5's feedback concerns visual and aesthetic aspects (p.7–8).</li>
+    </ul>
+    <p><strong>Cost.</strong> The average inference cost per game is about 5 USD for Direct LLM, 12 USD for OpenGame, and 17 USD for Play2Code (Table 8, p.18).</p>
+  </section>
+
+  <section>
+    <h2>Limitations and open questions</h2>
+    <ul>
+    <li>Only HTML web games are handled; native-engine and 3D games are left to future work (p.9).</li>
+    <li>The benchmark is a curated set of games selected for quality control and does not cover the full diversity of real-world games (p.9).</li>
+    <li>All games share one memory schema; game-specific or genre-aware memory structures may work better (p.9).</li>
+    <li>The authors acknowledge that human playtesters remain irreplaceable: a felt sense of difficulty, frustration, boredom, and surprise, as well as aesthetic judgment, is something no agent currently approximates (p.7).</li>
+    <li>Games are grouped by the refinement gain actually observed. The authors caution that this does not measure intrinsic difficulty and does not show that complexity determines the gain (p.7).</li>
+    <li>Play2Code costs more than both baselines (p.18).</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Related concepts</h2>
+    <ul>
+    <li><a href="../concepts/gui-agent.html">GUI Agent</a></li>
+    <li><a href="../concepts/playtesting.html">Playtesting</a></li>
+    <li><a href="../concepts/game-generation.html">Game Generation</a></li>
+    <li><a href="../concepts/agent-memory.html">Agent Memory</a></li>
+    <li><a href="../concepts/evaluation-benchmark.html">Evaluation Benchmark</a></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Relation to other sources</h2>
+    <ul>
+    <li><a href="2025-llm-game-rule-understanding.html">LLM Game Rule Understanding through Out-of-Distribution Fine-Tuning (2025)</a>: both papers build evaluation methods related to games, but they evaluate different things. That paper evaluates a model, asking whether an LLM can work out game states from text rules, with ground truth computed by a simulator. This paper evaluates generated games, judged against human-written criteria by an agent that actually plays them. Their motivations are also close: both want AI to give feedback during game development. This paper does not cite that one; the comparison is this wiki's own synthesis.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>My notes</h2>
+    <div class="notes">
+      <p>(Not yet filled in by the owner)</p>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>Written and maintained by AI following the rules in CLAUDE.md. These are reading notes; the original papers are authoritative.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fine-Tuning | Games × AI Paper Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">Games × AI Paper Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a>
+    <a class="lang-switch" href="../../concepts/fine-tuning.html" lang="zh-Hant">中文</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">Concept</span>
+  <h1>Fine-Tuning</h1>
+  <dl class="meta">
+    <dt>Aliases</dt><dd>fine-tune, finetuning, supervised fine-tuning</dd>
+    <dt>Last updated</dt><dd>2026-11-16</dd>
+    <dt>Sources</dt><dd>1 source</dd>
+  </dl>
+
+  <section>
+    <h2>One-line definition</h2>
+    <p class="lead">Taking an already pre-trained model and continuing to train it on task-specific data so that it performs better on that task.</p>
+  </section>
+
+  <section>
+    <h2>Explanation</h2>
+    <p>A pre-trained model already has broad general knowledge. Fine-tuning adjusts its parameters with a small amount of task data on top of that foundation, at far lower cost than training from scratch.</p>
+    <p>The main risk is over-specialization: the model improves on the kinds of data it was trained on but may lose some of its generality. So when evaluating fine-tuning, looking only at the trained task is not enough. One should also check whether nearby, untrained tasks improve or get worse.</p>
+    <p>The design of the training data affects the outcome, for example the number of samples, how broad the covered types are, and whether answers come with a reasoning process.</p>
+  </section>
+
+  <section>
+    <h2>What each source says</h2>
+    <h3>LLM Game Rule Understanding through Out-of-Distribution Fine-Tuning (2025)</h3>
+    <p><a href="../sources/2025-llm-game-rule-understanding.html">This paper</a> fine-tunes GPT-4o-mini on Solitaire game progression questions and compares four training sets of different diversity, ft0 to ft3 (p.7). Its findings:</p>
+    <ul>
+    <li><strong>A few samples are enough.</strong> 200 samples from a single game raise next-state accuracy on Blind Alley's from 0.14 to 0.82 (p.9).</li>
+    <li><strong>More samples are not always better.</strong> Among 100, 200, and 300 samples, 200 works best (p.8).</li>
+    <li><strong>The diversity trade-off.</strong> With more variants in training, each variant gets fewer samples, so in-distribution performance may drop, but out-of-distribution performance usually rises (p.9).</li>
+    <li><strong>Including reasoning helps.</strong> The training data contains step-by-step legality explanations, which the authors believe help legality judgments generalize. The next state has no such explanation, and its generalization is less consistent (p.8).</li>
+    <li><strong>A small model can catch up with large ones.</strong> Fine-tuned GPT-4o-mini matches or surpasses DeepSeek-v3 and Llama 3.3 70B without fine-tuning in most cases (p.8).</li>
+    </ul>
+    <p>The authors also note that performance after fine-tuning is still not satisfactory (p.9).</p>
+  </section>
+
+  <section>
+    <h2>Related concepts</h2>
+    <ul>
+    <li><a href="out-of-distribution-generalization.html">Out-of-Distribution Generalization</a>: a way to check whether fine-tuning has over-specialized the model.</li>
+    <li><a href="game-rule-understanding.html">Game Rule Understanding</a>: the ability that fine-tuning aims to improve here.</li>
+    <li><a href="agent-memory.html">Agent Memory</a>: another way for a system to improve from experience. The difference is that it does not change model parameters.</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>Written and maintained by AI following the rules in CLAUDE.md. These are reading notes; the original papers are authoritative.</p>
+</footer>
+</body>
+</html>

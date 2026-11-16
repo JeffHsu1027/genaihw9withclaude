@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>分布外泛化（Out-of-Distribution Generalization）｜遊戲 × AI 論文 Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">遊戲 × AI 論文 Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">首頁</a>
+    <a class="lang-switch" href="../en/concepts/out-of-distribution-generalization.html" lang="en">English</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">概念</span>
+  <h1>分布外泛化（Out-of-Distribution Generalization）</h1>
+  <dl class="meta">
+    <dt>別名</dt><dd>OOD、OOD 泛化、分布外、out-of-distribution、分布內、in-distribution</dd>
+    <dt>最後更新</dt><dd>2026-11-16</dd>
+    <dt>來源數量</dt><dd>2 個來源</dd>
+  </dl>
+
+  <section>
+    <h2>一句話定義</h2>
+    <p class="lead">模型在與訓練資料性質不同的資料上，仍然能維持表現的能力。</p>
+  </section>
+
+  <section>
+    <h2>說明</h2>
+    <p>訓練時看過的資料類型稱為分布內（in-distribution，ID），沒看過的稱為分布外（out-of-distribution，OOD）。模型在分布內表現好，可能只是記住了訓練資料的特徵；在分布外也表現好，才比較能說它學到了可以轉移的能力。</p>
+    <p>「分布外」是程度問題，不是非黑即白。新資料與訓練資料的差異有大有小，差異越大通常越難泛化。因此評估時除了分成內與外，最好也衡量「有多外」。</p>
+    <p>要注意分布內與分布外之間常有取捨：把訓練資料變得更多樣，通常有利於分布外表現，但每一種資料分到的樣本變少，分布內表現可能下降。</p>
+  </section>
+
+  <section>
+    <h2>各來源怎麼說</h2>
+    <h3>LLM Game Rule Understanding through Out-of-Distribution Fine-Tuning（2025）</h3>
+    <p><a href="../sources/2025-llm-game-rule-understanding.html">這篇論文</a>把「分布」定義在規則集的層次：訓練時沒看過的接龍變體就是分布外。它還加了一個中間類別（p.7）：</p>
+    <ul>
+    <li><strong>分布內（ID）</strong>：測試的變體有另一批樣本在訓練集中。</li>
+    <li><strong>同家族（IF）</strong>：變體本身不在訓練集，但同家族的其他變體在。</li>
+    <li><strong>分布外（OOD）</strong>：變體不在訓練集中。</li>
+    </ul>
+    <p>作者另外用規則差異的數量定義變體之間的距離，來衡量「有多外」（p.6）。</p>
+    <p>主要發現（p.8–9）：</p>
+    <ul>
+    <li>微調對分布內與分布外的規則集幾乎都有幫助。</li>
+    <li>訓練的變體越多樣，分布外表現越好，分布內表現則可能下降。</li>
+    <li>泛化有極限：規則差異太大的 Thirteen，微調後沒有明顯進步。</li>
+    <li>重新組合相似的規則，比面對全新的規則容易泛化。</li>
+    </ul>
+    <p>論文也提到一個不同的結果：Chu et al. 在 General Points 遊戲上發現微調會降低分布外表現，強化學習才會提升（p.3）。作者指出兩者的設定不同，General Points 的規則變化只影響牌面如何解讀，接龍變體的規則則直接改變玩法。</p>
+    <h3>World Models（2018）</h3>
+    <p><a href="../sources/2018-world-models.html">這篇論文</a>沒有把分布外泛化當成研究主題，但在一個關鍵處遇到它：學出來的<a href="world-model.html">世界模型</a>只在訓練資料涵蓋的狀態附近準確。</p>
+    <p>世界模型的訓練資料來自隨機策略的遊玩紀錄（p.5）。控制器在世界模型中訓練時，會找到在模型裡看起來很好的策略，搬到真實環境卻失敗。作者說明，這通常是因為策略走到了偏離訓練分布、模型預測錯誤的狀態（p.9）。</p>
+    <p>論文的對策不是擴大訓練資料，而是提高取樣溫度，讓虛擬環境更隨機，使控制器較難利用模型的錯誤（p.9–10）。對於更複雜的環境，作者提出迭代訓練：讓代理人持續探索並收集新的觀察，用來改進世界模型（p.10）。</p>
+    <h3>來源之間的比較</h3>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th></th>
+    <th>2025 規則理解</th>
+    <th>2018 World Models</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>「分布」指什麼</td>
+    <td>訓練時看過的規則集</td>
+    <td>隨機遊玩時到過的狀態</td>
+    </tr>
+    <tr>
+    <td>誰面對分布外資料</td>
+    <td>微調後的 LLM</td>
+    <td>學出來的世界模型</td>
+    </tr>
+    <tr>
+    <td>分布外時的後果</td>
+    <td>準確率下降，差異太大時微調無效</td>
+    <td>模型預測錯誤，被控制器利用</td>
+    </tr>
+    <tr>
+    <td>對策</td>
+    <td>增加訓練資料的多樣性</td>
+    <td>提高隨機性；迭代收集新資料</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <p>兩篇的共同結論是：學出來的模型只在與訓練資料相近的範圍內可靠。差別在於 2025 那篇直接衡量這個範圍有多大，2018 這篇則是在使用模型時被這個問題影響。兩篇之間沒有引用關係，這段比較是本 Wiki 的整理。</p>
+  </section>
+
+  <section>
+    <h2>相關概念</h2>
+    <ul>
+    <li><a href="fine-tuning.html">微調（Fine-Tuning）</a>：分布外泛化在這裡是用來檢驗微調的效果。</li>
+    <li><a href="game-rule-understanding.html">遊戲規則理解（Game Rule Understanding）</a>：被檢驗是否能泛化的能力。</li>
+    <li><a href="world-model.html">世界模型（World Model）</a>：在訓練資料沒涵蓋的狀態會預測錯誤。</li>
+    <li><a href="evaluation-benchmark.html">評測基準（Evaluation Benchmark）</a>：分布內與分布外是設計測試集時的一種切分方式。</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>由 AI 依照 CLAUDE.md 的規則撰寫與維護。內容為論文閱讀筆記，請以原論文為準。</p>
+</footer>
+</body>
+</html>

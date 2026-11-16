@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GUI Agent | Games × AI Paper Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">Games × AI Paper Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a>
+    <a class="lang-switch" href="../../concepts/gui-agent.html" lang="zh-Hant">中文</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">Concept</span>
+  <h1>GUI Agent</h1>
+  <dl class="meta">
+    <dt>Aliases</dt><dd>GUI agent, graphical user interface agent, computer-use agent</dd>
+    <dt>Last updated</dt><dd>2026-11-16</dd>
+    <dt>Sources</dt><dd>1 source</dd>
+  </dl>
+
+  <section>
+    <h2>One-line definition</h2>
+    <p class="lead">An AI agent that operates a graphical interface by looking at the screen and using the mouse and keyboard, the same way a person uses software.</p>
+  </section>
+
+  <section>
+    <h2>Explanation</h2>
+    <p>Most automation between programs relies on APIs or code. A GUI agent takes another route: what it sees is the screen, and what it does is click, press keys, and scroll. Such agents are usually built on models that handle both images and text.</p>
+    <p>Its operation can be split into three repeated steps: observe the current screen, reason about what to do next, perform one input action, and then observe how the screen changed.</p>
+    <p>The advantage is generality: as long as software has an interface humans can use, the agent can operate it, with no special hook required. The cost is that it is slower than calling a program directly, and it can misread the screen or click the wrong place.</p>
+  </section>
+
+  <section>
+    <h2>What each source says</h2>
+    <h3>GUI Agents for Continual Game Generation (2026)</h3>
+    <p><a href="../sources/2026-gui-agents-continual-game-generation.html">This paper</a> argues that, among the possible substitutes for human playtesters, only GUI agents meet the game on the same visual and input surface as humans, which makes them the natural surrogate (p.3).</p>
+    <p>The paper first verifies that they can actually play. On about 120 levels, the three models pass 0.72 to 0.82 of levels within 20 attempts, against 0.92 for humans (p.3). The authors note that the agents show the three capabilities a playtester needs: observing the screen, reasoning about the next step, and acting (p.3).</p>
+    <p>The paper gives GUI agents two separate roles:</p>
+    <ul>
+    <li><strong>Judge</strong>: plays the game with the rubric in hand and decides whether each criterion passes (p.4).</li>
+    <li><strong>Playtester</strong>: sees neither the rubric nor the code, and reports only what happened during play together with suggested fixes (p.5).</li>
+    </ul>
+    <p>Different models acting as playtester emphasize very different things; for example, nearly half of Kimi K2.5's feedback concerns visual and aesthetic aspects (p.7–8).</p>
+  </section>
+
+  <section>
+    <h2>Related concepts</h2>
+    <ul>
+    <li><a href="playtesting.html">Playtesting</a>: what GUI agents are used for here.</li>
+    <li><a href="agent-memory.html">Agent Memory</a>: the mechanism that lets agents accumulate testing experience.</li>
+    <li><a href="evaluation-benchmark.html">Evaluation Benchmark</a>: the setting in which a GUI agent serves as judge.</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>Written and maintained by AI following the rules in CLAUDE.md. These are reading notes; the original papers are authoritative.</p>
+</footer>
+</body>
+</html>

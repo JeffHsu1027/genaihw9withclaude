@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{title}}｜遊戲 × AI 論文 Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<!-- 範本：source.zh。複製後把所有 {{...}} 換成內容；{{slug}} 是不含副檔名的檔名。 -->
+<header class="site-header">
+  <a class="site-name" href="../index.html">遊戲 × AI 論文 Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">首頁</a>
+    <a class="lang-switch" href="../en/sources/{{slug}}.html" lang="en">English</a>
+  </nav>
+</header>
+<main class="page page-source">
+  <span class="tag tag-source">來源</span>
+  <h1>{{title}}</h1>
+  <dl class="meta">
+    <dt>作者</dt><dd>{{authors}}</dd>
+    <dt>年份</dt><dd>{{year}}</dd>
+    <dt>發表</dt><dd>{{venue}}</dd>
+    <dt>論文連結</dt><dd><a href="{{url}}">{{url}}</a></dd>
+    <dt>新增日期</dt><dd>{{added}}</dd>
+  </dl>
+
+  <section>
+    <h2>一句話總結</h2>
+    <p class="lead">{{summary}}</p>
+  </section>
+
+  <section>
+    <h2>研究問題</h2>
+    {{question}}
+  </section>
+
+  <section>
+    <h2>方法</h2>
+    {{method}}
+  </section>
+
+  <section>
+    <h2>主要結果</h2>
+    {{results}}
+  </section>
+
+  <section>
+    <h2>限制與未解問題</h2>
+    {{limitations}}
+  </section>
+
+  <section>
+    <h2>相關概念</h2>
+    {{concepts}}
+  </section>
+
+  <section>
+    <h2>與其他來源的關係</h2>
+    {{relations}}
+  </section>
+
+  <section>
+    <h2>我的筆記</h2>
+    <div class="notes">
+      <p>（擁有者尚未填寫）</p>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>由 AI 依照 CLAUDE.md 的規則撰寫與維護。內容為論文閱讀筆記，請以原論文為準。</p>
+</footer>
+</body>
+</html>

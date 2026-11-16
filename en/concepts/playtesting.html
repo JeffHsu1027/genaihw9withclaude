@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Playtesting | Games × AI Paper Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">Games × AI Paper Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a>
+    <a class="lang-switch" href="../../concepts/playtesting.html" lang="zh-Hant">中文</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">Concept</span>
+  <h1>Playtesting</h1>
+  <dl class="meta">
+    <dt>Aliases</dt><dd>playtest, play testing, automated playtesting</dd>
+    <dt>Last updated</dt><dd>2026-11-16</dd>
+    <dt>Sources</dt><dd>1 source</dd>
+  </dl>
+
+  <section>
+    <h2>One-line definition</h2>
+    <p class="lead">Finding a game's problems by actually playing it; what is checked is the experience of play, not the code.</p>
+  </section>
+
+  <section>
+    <h2>Explanation</h2>
+    <p>The quality of ordinary software can be checked against test cases or specifications. Games are harder. Much of a game's quality only shows up in interaction: whether controls respond, whether the screen updates correctly, whether the game can really be won, and whether the pacing and difficulty are right.</p>
+    <p>Game development has therefore long relied on playtesters, who sit down, play, and report what is broken or feels wrong. This works, but it takes human effort and its speed is limited.</p>
+    <p>Automated playtesting tries to hand part of this work to programs or AI. It is better at finding functional errors; subjective impressions such as whether a game is fun are much harder.</p>
+  </section>
+
+  <section>
+    <h2>What each source says</h2>
+    <h3>GUI Agents for Continual Game Generation (2026)</h3>
+    <p>The central claim of <a href="../sources/2026-gui-agents-continual-game-generation.html">this paper</a> is that a game's quality lives in play, not in code (p.8). A game can pass every test and still be broken in ways static analysis cannot reveal (p.1).</p>
+    <p>The paper uses <a href="gui-agent.html">GUI agents</a> as playtesters and treats play as two kinds of signal:</p>
+    <ul>
+    <li><strong>An evaluation signal</strong>: a judge plays the game and decides whether each criterion passes.</li>
+    <li><strong>A refinement signal</strong>: a playtester reports a play summary and a fix list, which the coding agent uses to revise the next build (p.5–6).</li>
+    </ul>
+    <p>Main evidence (p.6, p.19):</p>
+    <ul>
+    <li>Adding playtesting raises the average rubric pass rate from 52.2%, for an agentic pipeline that does not play, to 66.8%.</li>
+    <li>Replacing the playtester with "rereading its own code to self-verify" lowers the score from 72.3 to 58.7. The authors note that rendering glitches, input-handling errors, and timing-sensitive mechanics only appear during actual play.</li>
+    </ul>
+    <p>The paper also compares agents with human playtesters. The agent's advantage is that every step is logged and traceable. But a human's felt sense of difficulty, frustration, boredom, and surprise, along with aesthetic judgment, remains irreplaceable for now (p.7).</p>
+  </section>
+
+  <section>
+    <h2>Related concepts</h2>
+    <ul>
+    <li><a href="gui-agent.html">GUI Agent</a>: the role that carries out playtesting.</li>
+    <li><a href="game-generation.html">Game Generation</a>: what playtesting is meant to improve here.</li>
+    <li><a href="evaluation-benchmark.html">Evaluation Benchmark</a>: how playtest results are turned into a score.</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>Written and maintained by AI following the rules in CLAUDE.md. These are reading notes; the original papers are authoritative.</p>
+</footer>
+</body>
+</html>

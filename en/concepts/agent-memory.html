@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Memory | Games × AI Paper Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">Games × AI Paper Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a>
+    <a class="lang-switch" href="../../concepts/agent-memory.html" lang="zh-Hant">中文</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">Concept</span>
+  <h1>Agent Memory</h1>
+  <dl class="meta">
+    <dt>Aliases</dt><dd>agent memory, memory system, episode memory, skill memory, world memory</dd>
+    <dt>Last updated</dt><dd>2026-11-16</dd>
+    <dt>Sources</dt><dd>1 source</dd>
+  </dl>
+
+  <section>
+    <h2>One-line definition</h2>
+    <p class="lead">A mechanism that lets an AI agent keep its past experience and use it in later steps or tasks.</p>
+  </section>
+
+  <section>
+    <h2>Explanation</h2>
+    <p>A language model does not remember what happened in its previous task. Without a memory mechanism, an agent starts from zero every time and the same mistakes recur.</p>
+    <p>Agent memory stores experience as text, such as what was tried, what worked, and what general lessons were drawn, and reads it back into the model's input when needed. This requires no retraining, new experience is usable immediately, and the contents can be inspected and edited directly.</p>
+    <p>Two common design considerations are how long experience is kept (only within the current task, or across tasks in the long term) and who can see it (private to one agent, or shared among several).</p>
+  </section>
+
+  <section>
+    <h2>What each source says</h2>
+    <h3>GUI Agents for Continual Game Generation (2026)</h3>
+    <p><a href="../sources/2026-gui-agents-continual-game-generation.html">This paper</a> observes that the same kinds of failures recur, such as incorrect jump arcs in platformers, yet are often rediscovered from scratch each time (p.6). It designs three memory layers along two dimensions, lifecycle and scope (p.6):</p>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th>Layer</th>
+    <th>Lifecycle</th>
+    <th>Scope</th>
+    <th>Contents</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>Episode Memory</td>
+    <td>In-task</td>
+    <td>Shared by the two agents</td>
+    <td>Summaries, fixes, and attempts from each round</td>
+    </tr>
+    <tr>
+    <td>Skill Memory</td>
+    <td>Cross-task</td>
+    <td>Separate for each agent</td>
+    <td>Recurring code patterns; interaction strategies for playing</td>
+    </tr>
+    <tr>
+    <td>World Memory</td>
+    <td>Cross-task</td>
+    <td>Shared by all agents</td>
+    <td>General game rules, common archetypes, and design principles</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <p>Ablations with a GPT-5.4 backbone show that every layer contributes (p.18):</p>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th>Setting</th>
+    <th>Rubric pass rate</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>No memory</td>
+    <td>64.1</td>
+    </tr>
+    <tr>
+    <td>Episode only</td>
+    <td>69.3</td>
+    </tr>
+    <tr>
+    <td>Episode + Skill</td>
+    <td>71.8</td>
+    </tr>
+    <tr>
+    <td>All three layers</td>
+    <td>72.3</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <p>Episode Memory contributes the most. The authors explain that without it, the coding agent often re-introduces fixes it had already tried and discarded (p.18).</p>
+    <p>The authors also list the single memory schema shared by all games as a limitation (p.9).</p>
+  </section>
+
+  <section>
+    <h2>Related concepts</h2>
+    <ul>
+    <li><a href="gui-agent.html">GUI Agent</a>: one of the roles that uses this memory.</li>
+    <li><a href="fine-tuning.html">Fine-Tuning</a>: another way for a system to improve from data. The difference is that fine-tuning changes model parameters and memory does not.</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>Written and maintained by AI following the rules in CLAUDE.md. These are reading notes; the original papers are authoritative.</p>
+</footer>
+</body>
+</html>

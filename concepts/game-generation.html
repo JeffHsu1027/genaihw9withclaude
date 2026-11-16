@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>遊戲生成（Game Generation）｜遊戲 × AI 論文 Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">遊戲 × AI 論文 Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">首頁</a>
+    <a class="lang-switch" href="../en/concepts/game-generation.html" lang="en">English</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">概念</span>
+  <h1>遊戲生成（Game Generation）</h1>
+  <dl class="meta">
+    <dt>別名</dt><dd>AI 遊戲生成、遊戲程式生成、game code generation、規則生成</dd>
+    <dt>最後更新</dt><dd>2026-11-16</dd>
+    <dt>來源數量</dt><dd>2 個來源</dd>
+  </dl>
+
+  <section>
+    <h2>一句話定義</h2>
+    <p class="lead">讓 AI 依照自然語言的描述，自動產生遊戲或遊戲的一部分，例如程式碼、規則或關卡。</p>
+  </section>
+
+  <section>
+    <h2>說明</h2>
+    <p>遊戲生成可以發生在不同層次。最完整的是直接產生可執行的遊戲程式；較局部的則是產生規則、關卡或素材，再交給既有的引擎執行。</p>
+    <p>它比一般的程式生成困難，原因在於「對不對」很難定義。程式能執行不代表遊戲能玩，能玩也不代表符合原本的設計意圖。因此遊戲生成的研究往往同時要處理兩個問題：怎麼生成，以及怎麼判斷生成的結果好不好。</p>
+  </section>
+
+  <section>
+    <h2>各來源怎麼說</h2>
+    <h3>GUI Agents for Continual Game Generation（2026）</h3>
+    <p><a href="../sources/2026-gui-agents-continual-game-generation.html">這篇論文</a>生成的是完整的網頁遊戲（HTML/CSS/JS），並把既有做法整理成三種（p.2、p.6）：</p>
+    <ul>
+    <li><strong>靜態生成</strong>：從提示一次產生整個遊戲，之後不再修正。</li>
+    <li><strong>端到端的代理式系統</strong>：分多步產生程式，並在執行階段檢查，但只到語法與編譯層次。</li>
+    <li><strong>持續演化</strong>：論文提出的做法，讓寫程式與<a href="playtesting.html">試玩</a>反覆對話。</li>
+    </ul>
+    <p>三種做法的平均準則通過率依序為 29.7%、52.2% 與 66.8%（p.6）。論文的結論是，生成與評測都需要一個實際去玩的角色（p.8）。</p>
+    <h3>LLM Game Rule Understanding through Out-of-Distribution Fine-Tuning（2025）</h3>
+    <p><a href="../sources/2025-llm-game-rule-understanding.html">這篇論文</a>本身不生成遊戲，但把生成當作長期目標。它關心的是規則層次：希望 LLM 能在遊戲開發中評估、修改或生成規則（p.1）。</p>
+    <p>論文把這類任務稱為「規則空間」，並指出它需要模型考慮所有可能的盤面與動作，比只推演單一步驟困難（p.3）。作者認為要做到這一點，模型必須先能理解並泛化到沒看過的規則，所以論文先研究比較基礎的<a href="game-rule-understanding.html">遊戲規則理解</a>（p.1、p.3）。</p>
+    <h3>來源之間的比較</h3>
+    <p>兩篇處理的層次不同。前者生成整個可執行的遊戲，並從成品的行為判斷好壞；後者關心規則本身，並認為理解規則是生成規則的前提。兩篇之間沒有互相引用，這段比較是本 Wiki 的整理。</p>
+  </section>
+
+  <section>
+    <h2>相關概念</h2>
+    <ul>
+    <li><a href="playtesting.html">遊戲測試（Playtesting）</a>：判斷生成結果能不能玩的方法。</li>
+    <li><a href="game-rule-understanding.html">遊戲規則理解（Game Rule Understanding）</a>：生成與修改規則的前提能力。</li>
+    <li><a href="evaluation-benchmark.html">評測基準（Evaluation Benchmark）</a>：衡量生成品質的方式。</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>由 AI 依照 CLAUDE.md 的規則撰寫與維護。內容為論文閱讀筆記，請以原論文為準。</p>
+</footer>
+</body>
+</html>

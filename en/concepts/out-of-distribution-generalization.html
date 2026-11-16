@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Out-of-Distribution Generalization | Games × AI Paper Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">Games × AI Paper Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a>
+    <a class="lang-switch" href="../../concepts/out-of-distribution-generalization.html" lang="zh-Hant">中文</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">Concept</span>
+  <h1>Out-of-Distribution Generalization</h1>
+  <dl class="meta">
+    <dt>Aliases</dt><dd>OOD, OOD generalization, out-of-distribution, in-distribution</dd>
+    <dt>Last updated</dt><dd>2026-11-16</dd>
+    <dt>Sources</dt><dd>2 sources</dd>
+  </dl>
+
+  <section>
+    <h2>One-line definition</h2>
+    <p class="lead">A model's ability to keep performing well on data that differs in nature from its training data.</p>
+  </section>
+
+  <section>
+    <h2>Explanation</h2>
+    <p>Data of a kind seen during training is called in-distribution (ID); data of an unseen kind is called out-of-distribution (OOD). Good in-distribution performance may only mean the model memorized features of its training data. Good out-of-distribution performance is stronger evidence that it learned something transferable.</p>
+    <p>"Out-of-distribution" is a matter of degree, not a yes-or-no label. New data can differ from the training data a little or a lot, and larger differences are usually harder to generalize to. So besides splitting data into inside and outside, it is useful to measure how far outside it is.</p>
+    <p>There is often a trade-off between the two. Making the training data more diverse usually helps out-of-distribution performance, but each kind of data then gets fewer samples, so in-distribution performance may drop.</p>
+  </section>
+
+  <section>
+    <h2>What each source says</h2>
+    <h3>LLM Game Rule Understanding through Out-of-Distribution Fine-Tuning (2025)</h3>
+    <p><a href="../sources/2025-llm-game-rule-understanding.html">This paper</a> defines the "distribution" at the level of rulesets: a Solitaire variant not seen in training is out-of-distribution. It also adds a category in between (p.7):</p>
+    <ul>
+    <li><strong>In-distribution (ID)</strong>: a separate set of samples from the tested variant is in the training set.</li>
+    <li><strong>In-family (IF)</strong>: the variant is not in the training set, but other variants from its family are.</li>
+    <li><strong>Out-of-distribution (OOD)</strong>: the variant is not in the training set.</li>
+    </ul>
+    <p>The authors also define a distance between variants, based on the number of rule differences, to measure how far outside a variant is (p.6).</p>
+    <p>Main findings (p.8–9):</p>
+    <ul>
+    <li>Fine-tuning helps on both in-distribution and out-of-distribution rulesets in almost all cases.</li>
+    <li>The more diverse the training variants, the better the out-of-distribution performance, while in-distribution performance may drop.</li>
+    <li>Generalization has a limit: on Thirteen, whose rules differ too much, fine-tuning brings no meaningful improvement.</li>
+    <li>Recombining similar rules generalizes more easily than handling entirely new rules.</li>
+    </ul>
+    <p>The paper also mentions a different result: Chu et al. found that, on the game General Points, fine-tuning lowers out-of-distribution performance while reinforcement learning raises it (p.3). The authors point out that the settings differ. Rule variations in General Points only change how cards are interpreted, whereas rules in Solitaire variants directly change how the game is played.</p>
+    <h3>World Models (2018)</h3>
+    <p><a href="../sources/2018-world-models.html">This paper</a> does not study out-of-distribution generalization as a topic, but it meets the problem at a key point: a learned <a href="world-model.html">world model</a> is accurate only near the states covered by its training data.</p>
+    <p>The world model's training data comes from rollouts of a random policy (p.5). When a controller is trained inside the world model, it finds policies that look good under the model but fail in the actual environment. The authors explain that this is usually because the policy visits states away from the training distribution, where the model is wrong (p.9).</p>
+    <p>The paper's remedy is not to enlarge the training data but to raise the sampling temperature, which makes the virtual environment more random and makes it harder for the controller to exploit the model's errors (p.9–10). For more complex environments, the authors propose iterative training: let the agent keep exploring and collecting new observations to improve the world model (p.10).</p>
+    <h3>Comparing the sources</h3>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th></th>
+    <th>2025 rule understanding</th>
+    <th>2018 World Models</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>What the "distribution" is</td>
+    <td>Rulesets seen in training</td>
+    <td>States reached during random play</td>
+    </tr>
+    <tr>
+    <td>What faces out-of-distribution data</td>
+    <td>A fine-tuned LLM</td>
+    <td>A learned world model</td>
+    </tr>
+    <tr>
+    <td>Consequence out of distribution</td>
+    <td>Accuracy drops; fine-tuning stops helping when the difference is too large</td>
+    <td>The model predicts wrongly and the controller exploits it</td>
+    </tr>
+    <tr>
+    <td>Remedy</td>
+    <td>More diverse training data</td>
+    <td>More randomness; iteratively collecting new data</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <p>The shared conclusion is that a learned model is reliable only within a range close to its training data. The difference is that the 2025 paper measures how large this range is, while the 2018 paper is affected by the problem when using its model. There is no citation between the two papers; this comparison is this wiki's own synthesis.</p>
+  </section>
+
+  <section>
+    <h2>Related concepts</h2>
+    <ul>
+    <li><a href="fine-tuning.html">Fine-Tuning</a>: here, out-of-distribution generalization is used to examine the effect of fine-tuning.</li>
+    <li><a href="game-rule-understanding.html">Game Rule Understanding</a>: the ability being tested for generalization.</li>
+    <li><a href="world-model.html">World Model</a>: predicts wrongly in states its training data did not cover.</li>
+    <li><a href="evaluation-benchmark.html">Evaluation Benchmark</a>: in-distribution versus out-of-distribution is one way of splitting test sets.</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>Written and maintained by AI following the rules in CLAUDE.md. These are reading notes; the original papers are authoritative.</p>
+</footer>
+</body>
+</html>

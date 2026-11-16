@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{title}} | Games × AI Paper Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<!-- 範本：concept.en。複製後把所有 {{...}} 換成內容；{{slug}} 是不含副檔名的檔名。 -->
+<header class="site-header">
+  <a class="site-name" href="../index.html">Games × AI Paper Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a>
+    <a class="lang-switch" href="../../concepts/{{slug}}.html" lang="zh-Hant">中文</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">Concept</span>
+  <h1>{{title}}</h1>
+  <dl class="meta">
+    <dt>Aliases</dt><dd>{{aliases}}</dd>
+    <dt>Last updated</dt><dd>{{updated}}</dd>
+    <dt>Sources</dt><dd>{{source_count}}</dd>
+  </dl>
+
+  <section>
+    <h2>One-line definition</h2>
+    <p class="lead">{{definition}}</p>
+  </section>
+
+  <section>
+    <h2>Explanation</h2>
+    {{explanation}}
+  </section>
+
+  <section>
+    <h2>What each source says</h2>
+    {{per_source}}
+  </section>
+
+  <section>
+    <h2>Related concepts</h2>
+    {{related}}
+  </section>
+</main>
+<footer class="site-footer">
+  <p>Written and maintained by AI following the rules in CLAUDE.md. These are reading notes; the original papers are authoritative.</p>
+</footer>
+</body>
+</html>

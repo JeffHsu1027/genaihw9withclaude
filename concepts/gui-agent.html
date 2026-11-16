@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GUI 代理人（GUI Agent）｜遊戲 × AI 論文 Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">遊戲 × AI 論文 Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">首頁</a>
+    <a class="lang-switch" href="../en/concepts/gui-agent.html" lang="en">English</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">概念</span>
+  <h1>GUI 代理人（GUI Agent）</h1>
+  <dl class="meta">
+    <dt>別名</dt><dd>GUI agent、圖形介面代理人、computer-use agent</dd>
+    <dt>最後更新</dt><dd>2026-11-16</dd>
+    <dt>來源數量</dt><dd>1 個來源</dd>
+  </dl>
+
+  <section>
+    <h2>一句話定義</h2>
+    <p class="lead">透過觀看畫面並用滑鼠與鍵盤操作圖形介面的 AI 代理人，使用軟體的方式和人一樣。</p>
+  </section>
+
+  <section>
+    <h2>說明</h2>
+    <p>多數程式之間的自動化靠的是 API 或程式碼。GUI 代理人走另一條路：它看到的是螢幕畫面，做出的動作是點擊、按鍵與捲動。這類代理人通常建立在能同時處理圖像與文字的模型上。</p>
+    <p>它的運作可以拆成反覆進行的三步：觀察目前的畫面，推理下一步該做什麼，執行一個輸入動作，然後再觀察畫面的變化。</p>
+    <p>這種做法的好處是通用：只要軟體有人類可用的介面，代理人就能操作，不需要軟體另外提供接口。代價是比直接呼叫程式慢，也可能看錯畫面或點錯位置。</p>
+  </section>
+
+  <section>
+    <h2>各來源怎麼說</h2>
+    <h3>GUI Agents for Continual Game Generation（2026）</h3>
+    <p><a href="../sources/2026-gui-agents-continual-game-generation.html">這篇論文</a>主張，在各種可能替代人類測試員的方案中，只有 GUI 代理人是在與人類相同的視覺與輸入介面上接觸遊戲，因此是最自然的替身（p.3）。</p>
+    <p>論文先驗證它是否真的能玩遊戲。在約 120 個關卡上，三個模型 20 次嘗試內的通過率為 0.72 到 0.82，人類為 0.92（p.3）。作者指出代理人展現了測試員需要的三種能力：觀察畫面、推理下一步、執行動作（p.3）。</p>
+    <p>論文讓 GUI 代理人擔任兩個彼此獨立的角色：</p>
+    <ul>
+    <li><strong>評審</strong>：拿著評分準則去玩遊戲，判定每條準則是否通過（p.4）。</li>
+    <li><strong>測試員</strong>：不看準則也不看程式碼，只回報遊玩經過與修正建議（p.5）。</li>
+    </ul>
+    <p>不同模型擔任測試員時關注的重點差異很大，例如 Kimi K2.5 將近一半的回饋關於視覺與美感（p.7–8）。</p>
+  </section>
+
+  <section>
+    <h2>相關概念</h2>
+    <ul>
+    <li><a href="playtesting.html">遊戲測試（Playtesting）</a>：GUI 代理人在這裡被用來做的事。</li>
+    <li><a href="agent-memory.html">代理人記憶（Agent Memory）</a>：讓代理人累積測試經驗的機制。</li>
+    <li><a href="evaluation-benchmark.html">評測基準（Evaluation Benchmark）</a>：GUI 代理人擔任評審的場合。</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>由 AI 依照 CLAUDE.md 的規則撰寫與維護。內容為論文閱讀筆記，請以原論文為準。</p>
+</footer>
+</body>
+</html>

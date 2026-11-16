@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GUI Agents for Continual Game Generation｜遊戲 × AI 論文 Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">遊戲 × AI 論文 Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">首頁</a>
+    <a class="lang-switch" href="../en/sources/2026-gui-agents-continual-game-generation.html" lang="en">English</a>
+  </nav>
+</header>
+<main class="page page-source">
+  <span class="tag tag-source">來源</span>
+  <h1>GUI Agents for Continual Game Generation</h1>
+  <dl class="meta">
+    <dt>作者</dt><dd>Yixu Huang et al.</dd>
+    <dt>年份</dt><dd>2026</dd>
+    <dt>發表</dt><dd>arXiv 2605.28258v2</dd>
+    <dt>論文連結</dt><dd><a href="https://arxiv.org/abs/2605.28258">https://arxiv.org/abs/2605.28258</a></dd>
+    <dt>新增日期</dt><dd>2026-11-16</dd>
+  </dl>
+
+  <section>
+    <h2>一句話總結</h2>
+    <p class="lead">作者主張遊戲生成需要一個「玩家」，讓 GUI 代理人實際去玩生成出來的網頁遊戲：既用它建立評測基準 PlaytestArena，也把它放進生成流程成為 Play2Code，使平均準則通過率達到 66.8%，高於單次生成的 29.7% 與不試玩的代理式流程的 52.2%。</p>
+  </section>
+
+  <section>
+    <h2>研究問題</h2>
+    <p>生成一個遊戲不等於做出一個能玩的遊戲。遊戲可以編譯、執行、通過所有測試，卻仍然有靜態分析看不出來的問題，例如按鍵沒有反應、圖像沒有顯示、勝利條件永遠不會觸發。遊戲產業因此長期依賴人類測試員，但 LLM 產生遊戲的速度已經超過人類能試玩的速度（p.1）。</p>
+    <p>論文提出三個問題（p.2）：</p>
+    <ol>
+    <li>遊戲的本質如何改變「更好」的定義？</li>
+    <li>「玩家」應該長什麼樣子、放在流程的哪裡？</li>
+    <li>這樣的「玩家」如何推動遊戲生成，方向是否與人類一致？</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>方法</h2>
+    <p><strong>先確認 GUI 代理人能不能試玩。</strong> 作者用 20 個網頁遊戲（拆成約 120 個關卡）測試三個模型，並請三位人類玩家在相同條件下遊玩作為對照（p.3）。</p>
+    <p><strong>PlaytestArena：評測基準。</strong> 包含 200 個網頁遊戲生成任務，涵蓋 8 種類型，遊戲以獨立的 HTML/CSS/JS 檔案呈現（p.4）。每個任務有兩部分：</p>
+    <ul>
+    <li>由人類專家撰寫的生成提示，平均 131 個 token，說明玩法、勝負條件、玩家輸入與回饋行為。</li>
+    <li>由人類專家撰寫的評分準則（rubric），每一條描述一個可觀察的預期行為，例如「生成的敵人會朝玩家的位置移動」。全部共 1,548 條，每個遊戲 5 到 17 條、平均 7.7 條，分屬機制、操控、進程、介面與視覺回饋五個面向（p.4、p.14）。</li>
+    </ul>
+    <p>評分由獨立的 GPT-5.5 GUI 評審執行：它在瀏覽器載入遊戲，用點擊與按鍵遊玩，再依觀察到的過程對每條準則判定通過或不通過。分數是通過準則的比例（p.4）。</p>
+    <p><strong>Play2Code：把試玩放進生成流程。</strong> 兩個代理人圍繞同一個執行環境合作（p.5）：</p>
+    <ul>
+    <li><strong>遊戲代理人（Game Agent）</strong>負責撰寫、除錯與修改程式碼。</li>
+    <li><strong>GUI 測試員</strong>在瀏覽器遊玩目前的版本，看不到程式碼，也看不到評分準則。結束後產出兩份文件：遊玩摘要，以及把觀察到的問題對應到程式修改方向的修正清單（p.5–6）。</li>
+    </ul>
+    <p>遊戲代理人把這份報告當作建議而非指令，自行決定採納哪些修正。流程在測試員判斷遊戲已符合提示的意圖，或達到回合上限時結束（p.6）。回合上限為 5，平均實際執行 3.24 回合，93.5% 的任務提前結束（p.18）。</p>
+    <p><strong>三層記憶。</strong> 依生命週期（任務內或跨任務）與範圍劃分為情節記憶、技能記憶與世界記憶，讓經驗能在回合之間與任務之間累積（p.6）。詳見<a href="../concepts/agent-memory.html">代理人記憶</a>。</p>
+    <p><strong>比較對象。</strong> Direct LLM 一次輸出整個遊戲；OpenGame 是代理式流程，會反覆建置、執行並在語法與編譯層次檢查，但不試玩。三種方法都分別以 GPT-5.4、Claude Sonnet 4.6、Kimi K2.5 作為骨幹模型（p.6）。</p>
+  </section>
+
+  <section>
+    <h2>主要結果</h2>
+    <p><strong>GUI 代理人能夠試玩，但仍不及人類。</strong> 20 次嘗試內的關卡通過率：GPT-5.4 為 0.82、Sonnet 4.6 為 0.79、Kimi K2.5 為 0.72，人類為 0.92（Table 1，p.3）。</p>
+    <p><strong>試玩帶來明顯提升。</strong> 各方法在 PlaytestArena 的平均準則通過率（%）（Table 3，p.6）：</p>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th>骨幹模型</th>
+    <th>Direct LLM</th>
+    <th>OpenGame</th>
+    <th>Play2Code</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>GPT-5.4</td>
+    <td>31.6</td>
+    <td>55.7</td>
+    <td>72.3</td>
+    </tr>
+    <tr>
+    <td>Sonnet 4.6</td>
+    <td>29.7</td>
+    <td>55.3</td>
+    <td>71.1</td>
+    </tr>
+    <tr>
+    <td>Kimi K2.5</td>
+    <td>27.8</td>
+    <td>45.5</td>
+    <td>56.9</td>
+    </tr>
+    <tr>
+    <td>三者平均</td>
+    <td>29.7</td>
+    <td>52.2</td>
+    <td>66.8</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <ul>
+    <li>與 OpenGame 的比較最能說明問題：它已經會反覆建置與檢查，只差沒有試玩。操控沒反應、缺少狀態轉換、勝利條件不觸發這類問題，在程式碼與編譯層次看不到，只有遊玩時才會浮現（p.6）。</li>
+    <li>分數隨回合單調上升。早期回合多半暴露基本的互動問題，後期回合處理較細的問題，例如視覺效果（p.7）。</li>
+    </ul>
+    <p><strong>消融實驗（以 GPT-5.4 為骨幹，p.18–19）：</strong></p>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th>設定</th>
+    <th>準則通過率</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>完整 Play2Code</td>
+    <td>72.3</td>
+    </tr>
+    <tr>
+    <td>完全不用記憶</td>
+    <td>64.1</td>
+    </tr>
+    <tr>
+    <td>移除 GUI 測試員，改由遊戲代理人自我檢查</td>
+    <td>58.7</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <p>移除 GUI 測試員造成的下降比移除任何一層記憶都大，作者據此認為實際遊玩的回饋是影響最大的元件（p.19）。</p>
+    <p><strong>評審可靠嗎。</strong> GPT-5.5 評審與人類在準則層次的一致率為 87.9%（κ = 0.66），人類彼此之間為 91.4%（κ = 0.68）。改用 Claude Opus 4.8 與 Gemini 3.5 Flash 當評審，三種方法的排序不變（p.4–5）。</p>
+    <p><strong>與人類測試員的比較。</strong></p>
+    <ul>
+    <li>GUI 代理人的每個動作、觀察與診斷都有紀錄，問題可以回溯到具體的畫面序列；人類的報告則是事後的摘要（p.7）。</li>
+    <li>在 50 個中等增益的遊戲上，GUI 代理人推動改進的效果接近人類測試員（p.7）。</li>
+    <li>不同模型關注的重點不同：GPT-5.4 集中在功能錯誤與操控反應，Sonnet 4.6 較平均並關注節奏與難度平衡，Kimi K2.5 有將近一半的回饋關於視覺與美感（p.7–8）。</li>
+    </ul>
+    <p><strong>成本。</strong> 每個遊戲的平均推論成本約為 Direct LLM 5 美元、OpenGame 12 美元、Play2Code 17 美元（Table 8，p.18）。</p>
+  </section>
+
+  <section>
+    <h2>限制與未解問題</h2>
+    <ul>
+    <li>只處理 HTML 網頁遊戲，尚未延伸到原生引擎或 3D 遊戲（p.9）。</li>
+    <li>基準是為了品質控管而精選的一組遊戲，無法涵蓋真實世界遊戲的多樣性（p.9）。</li>
+    <li>所有遊戲共用同一套記憶結構，依遊戲或類型設計的記憶結構可能更好（p.9）。</li>
+    <li>作者承認人類測試員仍無可取代：對難度、挫折、無聊與驚喜的實際感受，以及美感判斷，目前沒有代理人能近似（p.7）。</li>
+    <li>遊戲依「實際獲得的改進幅度」分組，作者提醒這不代表遊戲本身的難度，也不能推論複雜度決定改進幅度（p.7）。</li>
+    <li>Play2Code 的成本高於兩個比較對象（p.18）。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>相關概念</h2>
+    <ul>
+    <li><a href="../concepts/gui-agent.html">GUI 代理人（GUI Agent）</a></li>
+    <li><a href="../concepts/playtesting.html">遊戲測試（Playtesting）</a></li>
+    <li><a href="../concepts/game-generation.html">遊戲生成（Game Generation）</a></li>
+    <li><a href="../concepts/agent-memory.html">代理人記憶（Agent Memory）</a></li>
+    <li><a href="../concepts/evaluation-benchmark.html">評測基準（Evaluation Benchmark）</a></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>與其他來源的關係</h2>
+    <ul>
+    <li><a href="2025-llm-game-rule-understanding.html">LLM Game Rule Understanding through Out-of-Distribution Fine-Tuning（2025）</a>：兩篇都在建立與遊戲有關的評測方法，但評測的對象不同。那一篇評測的是模型，問 LLM 能否依文字規則推演盤面，標準答案由模擬器算出；這一篇評測的是生成出來的遊戲，由代理人實際遊玩後依人類撰寫的準則判定。兩篇的動機也相近，都希望 AI 能在遊戲開發中提供回饋。這一篇沒有引用那一篇，以上是本 Wiki 的整理。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>我的筆記</h2>
+    <div class="notes">
+      <p>（擁有者尚未填寫）</p>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>由 AI 依照 CLAUDE.md 的規則撰寫與維護。內容為論文閱讀筆記，請以原論文為準。</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>演化策略（Evolution Strategies）｜遊戲 × AI 論文 Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">遊戲 × AI 論文 Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">首頁</a>
+    <a class="lang-switch" href="../en/concepts/evolution-strategies.html" lang="en">English</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">概念</span>
+  <h1>演化策略（Evolution Strategies）</h1>
+  <dl class="meta">
+    <dt>別名</dt><dd>ES、CMA-ES、演化演算法、evolutionary algorithm、黑箱最佳化、black-box optimization</dd>
+    <dt>最後更新</dt><dd>2026-11-16</dd>
+    <dt>來源數量</dt><dd>1 個來源</dd>
+  </dl>
+
+  <section>
+    <h2>一句話定義</h2>
+    <p class="lead">一類模仿演化的最佳化方法：反覆產生多組候選參數，評估每一組的表現，再根據表現好的候選產生下一代。</p>
+  </section>
+
+  <section>
+    <h2>說明</h2>
+    <p>多數神經網路以反向傳播訓練，需要能計算梯度的損失函數。演化策略不需要梯度，它只要求能對每一組參數打一個分數，所以也稱為黑箱最佳化。</p>
+    <p>基本流程是：從一個機率分布取樣出一批參數，分別評分，再調整這個分布，讓它往高分的方向移動，如此重複。CMA-ES 是其中一種常用的演算法，會同時調整取樣分布的形狀。</p>
+    <p>它的優點是簡單、容易平行化，而且只需要最終結果的分數，不必知道每一步的貢獻。缺點是參數數量一多效率就變差，因此比較適合小模型。</p>
+  </section>
+
+  <section>
+    <h2>各來源怎麼說</h2>
+    <h3>World Models（2018）</h3>
+    <p><a href="../sources/2018-world-models.html">這篇論文</a>用 CMA-ES 訓練代理人的控制器 C（p.4）。</p>
+    <p>論文的架構設計與這個選擇互相配合：把複雜度都放進以反向傳播訓練的<a href="world-model.html">世界模型</a>，控制器刻意做成只有 867 個參數的線性模型（p.5）。作者指出 CMA-ES 適合最多數千個參數的問題（p.4）。</p>
+    <p>作者列出的好處（p.12）：</p>
+    <ul>
+    <li>只需要提供整場的累積獎勵，不需要完整的過程紀錄。這繞開了強化學習中困難的功勞分配問題。</li>
+    <li>容易平行化，可以同時讓許多候選參數各自遊玩，再彙整分數。</li>
+    </ul>
+    <p>實驗中是在單一機器的多個 CPU 核心上平行執行多場遊玩（p.4）。作者也引用其他研究，說明演化策略是傳統深度強化學習方法之外可行的選擇（p.12）。</p>
+  </section>
+
+  <section>
+    <h2>相關概念</h2>
+    <ul>
+    <li><a href="world-model.html">世界模型（World Model）</a>：負責提供控制器所需的表示，讓控制器可以很小。</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>由 AI 依照 CLAUDE.md 的規則撰寫與維護。內容為論文閱讀筆記，請以原論文為準。</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>遊戲測試（Playtesting）｜遊戲 × AI 論文 Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">遊戲 × AI 論文 Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">首頁</a>
+    <a class="lang-switch" href="../en/concepts/playtesting.html" lang="en">English</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">概念</span>
+  <h1>遊戲測試（Playtesting）</h1>
+  <dl class="meta">
+    <dt>別名</dt><dd>playtest、試玩、試玩測試、自動化遊戲測試</dd>
+    <dt>最後更新</dt><dd>2026-11-16</dd>
+    <dt>來源數量</dt><dd>1 個來源</dd>
+  </dl>
+
+  <section>
+    <h2>一句話定義</h2>
+    <p class="lead">藉由實際遊玩來找出遊戲的問題，檢查的是玩起來的體驗，而不是程式碼本身。</p>
+  </section>
+
+  <section>
+    <h2>說明</h2>
+    <p>一般軟體的品質可以用測試案例或規格來檢查，遊戲則不容易。遊戲的品質有很大一部分只在互動中才看得出來：操作有沒有反應、畫面有沒有正確更新、能不能真的獲勝、節奏與難度是否恰當。</p>
+    <p>因此遊戲開發長期依賴測試員：坐下來玩，然後回報哪裡壞了、哪裡感覺不對。這種做法有效，但耗費人力，速度也有限。</p>
+    <p>自動化遊戲測試想用程式或 AI 來分擔這項工作。它比較擅長找出功能上的錯誤，至於好不好玩這類主觀感受則困難得多。</p>
+  </section>
+
+  <section>
+    <h2>各來源怎麼說</h2>
+    <h3>GUI Agents for Continual Game Generation（2026）</h3>
+    <p><a href="../sources/2026-gui-agents-continual-game-generation.html">這篇論文</a>的核心主張是：遊戲的品質存在於遊玩之中，而不在程式碼裡（p.8）。遊戲可以通過所有測試，卻仍有靜態分析看不出來的問題（p.1）。</p>
+    <p>論文用 <a href="gui-agent.html">GUI 代理人</a>擔任測試員，並把試玩當成兩種訊號：</p>
+    <ul>
+    <li><strong>評測訊號</strong>：由評審遊玩後判定準則是否通過。</li>
+    <li><strong>改進訊號</strong>：測試員回報遊玩摘要與修正清單，交給寫程式的代理人修改下一版（p.5–6）。</li>
+    </ul>
+    <p>主要證據（p.6、p.19）：</p>
+    <ul>
+    <li>加入試玩後，平均準則通過率從不試玩的代理式流程的 52.2% 升到 66.8%。</li>
+    <li>把測試員換成「重讀自己的程式碼來自我檢查」，分數從 72.3 降到 58.7。作者指出畫面錯誤、輸入處理錯誤與時間敏感的機制只在實際遊玩時才會出現。</li>
+    </ul>
+    <p>論文也比較了代理人與人類測試員。代理人的優勢是每一步都有紀錄、可以回溯；但人類對難度、挫折、無聊與驚喜的實際感受，以及美感判斷，目前仍無可取代（p.7）。</p>
+  </section>
+
+  <section>
+    <h2>相關概念</h2>
+    <ul>
+    <li><a href="gui-agent.html">GUI 代理人（GUI Agent）</a>：執行試玩的角色。</li>
+    <li><a href="game-generation.html">遊戲生成（Game Generation）</a>：試玩在這裡要改進的對象。</li>
+    <li><a href="evaluation-benchmark.html">評測基準（Evaluation Benchmark）</a>：把試玩結果轉成分數的方式。</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>由 AI 依照 CLAUDE.md 的規則撰寫與維護。內容為論文閱讀筆記，請以原論文為準。</p>
+</footer>
+</body>
+</html>

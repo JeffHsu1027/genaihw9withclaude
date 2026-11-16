@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Game Description Language | Games × AI Paper Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">Games × AI Paper Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a>
+    <a class="lang-switch" href="../../concepts/game-description-language.html" lang="zh-Hant">中文</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">Concept</span>
+  <h1>Game Description Language</h1>
+  <dl class="meta">
+    <dt>Aliases</dt><dd>GDL, SGDL, Solitaire GDL</dd>
+    <dt>Last updated</dt><dd>2026-11-16</dd>
+    <dt>Sources</dt><dd>1 source</dd>
+  </dl>
+
+  <section>
+    <h2>One-line definition</h2>
+    <p class="lead">A formal language for describing game rules precisely, so that a program can read the rules directly and simulate the game.</p>
+  </section>
+
+  <section>
+    <h2>Explanation</h2>
+    <p>Rules written in natural language are easily ambiguous, and a program cannot execute them directly. A game description language (GDL) writes rules in a fixed format: which objects exist, the initial state, the available actions, the conditions for each action, and the win condition.</p>
+    <p>With a GDL, one program can simulate many different games just by swapping the description file. This is useful for research: rule variants can be produced in bulk, the legality of an action can be checked automatically, the correct next state can be computed, and so questions with ground-truth answers can be generated automatically.</p>
+    <p>The expressive range of a GDL is usually a design trade-off: a simpler language is easier to use but can describe fewer kinds of games.</p>
+  </section>
+
+  <section>
+    <h2>What each source says</h2>
+    <h3>LLM Game Rule Understanding through Out-of-Distribution Fine-Tuning (2025)</h3>
+    <p><a href="../sources/2025-llm-game-rule-understanding.html">This paper</a> proposes SGDL (Solitaire GDL), a language specific to Solitaire that aims to support a large set of variants while staying fairly simple (p.4). An SGDL file has five sections (p.4–5):</p>
+    <ul>
+    <li><code>$cards</code>: how many decks are used and which suits and cards are present.</li>
+    <li><code>$initial</code>: which piles exist, how cards are dealt at the start, and whether they are face-up or face-down.</li>
+    <li><code>$actions</code>: the possible actions (move one card, move a stack, draw) and the conditions that make each one legal.</li>
+    <li><code>$auto</code>: actions performed automatically when their conditions are met (optional).</li>
+    <li><code>$win</code>: the win condition.</li>
+    </ul>
+    <p>Conditions can be combined into trees with And and Or (p.5).</p>
+    <p>Notably, SGDL is used only to define games and generate data; it is not shown to the LLM. The framework turns SGDL into a natural-language description of the rules before giving it to the model. The reasons are that natural language generalizes more robustly to other games, and that earlier work shows LLMs understand rules better in natural language (p.4).</p>
+  </section>
+
+  <section>
+    <h2>Related concepts</h2>
+    <ul>
+    <li><a href="game-rule-understanding.html">Game Rule Understanding</a>: a GDL makes it possible to test this ability automatically and at scale.</li>
+    <li><a href="evaluation-benchmark.html">Evaluation Benchmark</a>: a GDL lets questions and ground-truth answers be generated automatically.</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>Written and maintained by AI following the rules in CLAUDE.md. These are reading notes; the original papers are authoritative.</p>
+</footer>
+</body>
+</html>
