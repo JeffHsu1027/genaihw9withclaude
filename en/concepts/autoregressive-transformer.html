@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Autoregressive Transformer | Games × AI Paper Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">Games × AI Paper Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a>
+    <a class="lang-switch" href="../../concepts/autoregressive-transformer.html" lang="zh-Hant">中文</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">Concept</span>
+  <h1>Autoregressive Transformer</h1>
+  <dl class="meta">
+    <dt>Aliases</dt><dd>causal transformer, decoder-only transformer, next-token prediction, GPT, autoregressive model</dd>
+    <dt>Last updated</dt><dd>2026-11-17</dd>
+    <dt>Sources</dt><dd>1 source</dd>
+  </dl>
+
+  <section>
+    <h2>One-line definition</h2>
+    <p class="lead">A sequence model that predicts each next token from only the tokens before it, then appends the result to the sequence and keeps generating.</p>
+  </section>
+
+  <section>
+    <h2>Explanation</h2>
+    <p>A transformer uses attention to let every position in a sequence refer to other positions. The autoregressive version adds a causal mask, so each position can see only what comes before it; it is also called a causal transformer. The GPT family uses this architecture.</p>
+    <p>In training, the model is given a sequence and asked to predict the next token at every position, with a cross-entropy loss measuring the error. In generation, one token is sampled from the probability distribution the model outputs, appended to the sequence, and the next one is predicted. Because of sampling, the same beginning can lead to different continuations.</p>
+    <p>This kind of model is not limited to text. As long as data can be turned into discrete tokens, images, audio, or actions can be handled the same way.</p>
+    <p>The main limitation is context length: the model sees only a fixed number of the most recent tokens, and anything earlier does not affect the prediction.</p>
+  </section>
+
+  <section>
+    <h2>What each source says</h2>
+    <h3>World and Human Action Models towards gameplay ideation (2025)</h3>
+    <p><a href="../sources/2025-world-and-human-action-models.html">This paper</a> uses an autoregressive transformer as its sequence prediction backbone (p.3).</p>
+    <ul>
+    <li><strong>Input sequence</strong>: frame tokens (obtained through <a href="vector-quantization.html">vector quantization</a>) interleaved with controller action tokens. There is no delimiter in the sequence; the model has to infer from position embeddings whether a frame or an action should be predicted next (Fig. 2, p.4).</li>
+    <li><strong>Implementation</strong>: a GPT-2 architecture based on a modified nanoGPT, trained for next-token prediction with a cross-entropy loss (p.10).</li>
+    <li><strong>Scale</strong>: the largest model has 1.6B parameters and a context length of 5,560 tokens, which equals 1 second or 10 frames, and is trained for 200k updates (p.10).</li>
+    <li><strong>Prompting</strong>: tokens for frames or actions can be replaced during generation. This is how generation is controlled through controller actions, and how the model continues from a frame the user has edited (p.3).</li>
+    </ul>
+    <p>The authors relate the choice of architecture to the three capabilities (p.3). Consistency needs a sequential model that captures the dependencies between frames and actions. Diversity needs a model that preserves the conditional distribution in the data. Persistency needs a model that can be conditioned on modified frames or actions. A further reason is scalability: the model should benefit from more data and compute.</p>
+    <p>The paper also analyses scale in the way that is done for large language models. It trains models of different sizes, observes how the loss changes with compute, and extrapolates from the 15M to 206M models to predict the final loss of the 894M model accurately (p.10).</p>
+  </section>
+
+  <section>
+    <h2>Related concepts</h2>
+    <ul>
+    <li><a href="vector-quantization.html">Vector Quantization</a>: turns frames into discrete tokens that this model can process.</li>
+    <li><a href="world-model.html">World Model</a>: here, the transformer is the part of the world model that predicts the future.</li>
+    <li><a href="creativity-support.html">Creativity Support</a>: sampling gives diversity, and replacing tokens makes the output modifiable.</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>Written and maintained by AI following the rules in CLAUDE.md. These are reading notes; the original papers are authoritative.</p>
+</footer>
+</body>
+</html>

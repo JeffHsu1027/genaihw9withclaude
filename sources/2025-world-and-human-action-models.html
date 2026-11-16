@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>World and Human Action Models towards gameplay ideation｜遊戲 × AI 論文 Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">遊戲 × AI 論文 Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">首頁</a>
+    <a class="lang-switch" href="../en/sources/2025-world-and-human-action-models.html" lang="en">English</a>
+  </nav>
+</header>
+<main class="page page-source">
+  <span class="tag tag-source">來源</span>
+  <h1>World and Human Action Models towards gameplay ideation</h1>
+  <dl class="meta">
+    <dt>作者</dt><dd>Anssi Kanervisto et al.</dd>
+    <dt>年份</dt><dd>2025</dd>
+    <dt>發表</dt><dd>Nature (2025), doi:10.1038/s41586-025-08600-3</dd>
+    <dt>論文連結</dt><dd><a href="https://doi.org/10.1038/s41586-025-08600-3">https://doi.org/10.1038/s41586-025-08600-3</a></dd>
+    <dt>新增日期</dt><dd>2026-11-17</dd>
+  </dl>
+
+  <section>
+    <h2>一句話總結</h2>
+    <p class="lead">作者先訪談 27 位遊戲創作者，歸納出生成式 AI 要支援創意發想必須具備一致性、多樣性與持續性三種能力，再用約 7 年份的人類遊玩資料訓練出 WHAM：一個把畫面與手把動作都轉成離散 token、用 transformer 逐一預測的世界模型，並分別用 FVD、Wasserstein 距離與人工標註來評估這三種能力。</p>
+  </section>
+
+  <section>
+    <h2>研究問題</h2>
+    <p>生成式 AI 已經被創意產業用來協助發想，但研究顯示它的能力常常達不到創作者的期待（p.1）。作者認為關鍵在於兩種創作習慣沒有被現有模型好好支援：反覆微調（iterative tweaking）與發散思考（divergent thinking）（p.1）。</p>
+    <p>論文以遊戲開發為例，要回答的是：能不能從使用者的需求出發，決定生成模型該具備哪些能力、該怎麼評估，並做出一個符合這些需求的模型（p.1）？</p>
+    <p>作者選遊戲的理由有三（p.1）：3D 遊戲開發需要多種創作專業；遊玩資料是時間上連續的多模態資料，適合探索越來越複雜的任務；遊戲也是全球最大的娛樂產業，觸及超過 30 億人。</p>
+    <p>論文同時說明它不打算提供能直接放進開發流程的工具，目標是指出模型能力的缺口，並示範如何朝補上缺口的方向前進（p.9）。</p>
+  </section>
+
+  <section>
+    <h2>方法</h2>
+    <p>論文分成三個部分：使用者研究、模型、評估方法。</p>
+    <p><strong>使用者研究（p.2–3、p.9）。</strong> 作者訪談了 8 個團隊共 27 位遊戲創作者，包含 4 個獨立工作室、1 個 AAA 工作室與 3 個遊戲無障礙開發團隊。每場 90 分鐘，由同一工作室的三到四人參加。受訪者先操作一個設計探針（design probe）：它用 Unity 做成，模擬「用 AI 製作新關卡」的過程，但生成結果是事先寫好的腳本，不依賴真實模型。逐字稿以主題分析（thematic analysis）整理，得到兩個與模型開發有關的主題：</p>
+    <ul>
+    <li><strong>發散思考需要一致性。</strong> 創作者想要多樣的點子，但新點子必須放在一致的遊戲世界裡才有意義，例如遵守物理、風格與敘事（p.2）。</li>
+    <li><strong>反覆修改需要掌控權。</strong> 創作者通常直接在畫面上動手修改，一小步一小步調整，也會在不同版本之間來回比較、融合。因此模型不能只接受文字提示，還要能接受直接修改並沿用這些修改（p.2–3）。</li>
+    </ul>
+    <p>由此導出三種<a href="../concepts/creativity-support.html">創意支援</a>所需的模型能力（p.3）：</p>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th>能力</th>
+    <th>意思</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>一致性（consistency）</td>
+    <td>生成的畫面前後連貫，並符合遊戲機制，例如實體物件不會穿牆</td>
+    </tr>
+    <tr>
+    <td>多樣性（diversity）</td>
+    <td>同一個起點能生成多種有意義差異的後續發展</td>
+    </tr>
+    <tr>
+    <td>持續性（persistency）</td>
+    <td>使用者對畫面或動作的修改會被保留並融入後續生成，不會過幾格就消失</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <p><strong>模型 WHAM（p.3–4、p.10）。</strong> WHAM 是 World and Human Action Model 的縮寫，同時預測遊戲畫面與玩家的手把動作。作者說明它延續<a href="../concepts/world-model.html">世界模型</a>的研究路線（p.3）。</p>
+    <ul>
+    <li><strong>把資料變成離散 token。</strong> 畫面用 VQGAN 編碼器（見<a href="../concepts/vector-quantization.html">向量量化</a>）轉成一串 token。手把的按鍵本來就是離散的，左右搖桿的 x、y 座標則各切成 11 個區間（p.3）。</li>
+    <li><strong>預測下一個 token。</strong> 把畫面 token 與動作 token 交錯排成一條序列，訓練一個只有解碼器的 <a href="../concepts/autoregressive-transformer.html">transformer</a> 預測下一個 token。序列中沒有分隔符號，模型要靠位置嵌入判斷接下來該輸出畫面還是動作（Fig. 2，p.4）。</li>
+    <li><strong>生成與提示。</strong> 生成時逐一取樣下一個 token。過程中可以替換畫面或動作的 token，這就是用手把動作控制生成、或直接修改畫面的方式，也是持續性的前提（p.3）。</li>
+    </ul>
+    <p>最大的模型規格如下（p.3–4、p.10）：</p>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th>項目</th>
+    <th>1.6B WHAM</th>
+    <th>15M–894M WHAM</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>訓練資料</td>
+    <td>7 Maps</td>
+    <td>Skygarden</td>
+    </tr>
+    <tr>
+    <td>畫面解析度</td>
+    <td>300 × 180</td>
+    <td>128 × 128</td>
+    </tr>
+    <tr>
+    <td>每張畫面的 token 數</td>
+    <td>540</td>
+    <td>256</td>
+    </tr>
+    <tr>
+    <td>畫面詞彙量</td>
+    <td>16,384</td>
+    <td>4,096</td>
+    </tr>
+    <tr>
+    <td>上下文長度</td>
+    <td>5,560 個 token（1 秒，10 格）</td>
+    <td>894M 為 2,720 個 token（1 秒，10 格）</td>
+    </tr>
+    <tr>
+    <td>影像編碼器</td>
+    <td>約 300M 參數的 ViT-VQGAN</td>
+    <td>約 60M 參數的 VQGAN</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <p>每個動作佔 16 個 token（Fig. 2，p.4）。</p>
+    <p><strong>訓練資料（p.3、p.9–10）。</strong> 資料來自 Ninja Theory 的 3D 4v4 多人對戰遊戲 Bleeding Edge，錄製於 2020 年 9 月到 2022 年 10 月，已移除可識別個人的資訊。</p>
+    <ul>
+    <li><strong>7 Maps</strong>：60,986 場對戰，約 50 萬條玩家軌跡，超過 7 年的遊玩時間；降到每秒 10 格後約 14 億格。</li>
+    <li><strong>Skygarden</strong>：只取單一地圖，66,709 條軌跡，約 3.1 億格，約 1 年的遊玩時間。</li>
+    </ul>
+    <p>兩者都以 80:10:10 切成訓練、驗證與測試集（p.10）。</p>
+    <p><strong>WHAM Demonstrator（p.6–7）。</strong> 一個概念原型介面。使用者選幾格畫面當作提示，模型生成多條可能的後續分支；使用者可以挑任何一條或任何一格繼續生成、回頭改變先前的選擇，或直接修改畫面（例如加入一個敵人）與輸入手把動作。</p>
+  </section>
+
+  <section>
+    <h2>主要結果</h2>
+    <p><strong>一致性：用 FVD 衡量（p.4、p.10）。</strong> 作者拿 1,024 段沒用於訓練的人類遊玩影片當基準，每段 10 秒。給模型開頭 10 格與玩家的完整動作序列，讓它生成畫面，再計算與真實影片的 Fréchet Video Distance（FVD），越低越好。</p>
+    <ul>
+    <li>FVD 隨模型變大、運算量增加而改善（Fig. 3a，p.5）。</li>
+    <li>1.6B 模型的 FVD 更好。作者的解釋是它使用較高解析度的畫面，重建品質的上限較高（p.4）。</li>
+    <li>1.6B 模型能生成長達 2 分鐘仍然一致的遊玩片段（p.4–5）。</li>
+    <li>作者另外驗證 FVD 是否合適：兩位標註者逐格判斷 894M 模型的生成結果在結構、動作反應與互動三方面是否一致，結果與 FVD 的趨勢相符（p.10；Extended Data Fig. 3，p.15）。</li>
+    <li>FVD 與訓練損失的相關係數為 r = 0.77（p.10）。</li>
+    </ul>
+    <p><strong>多樣性：用 Wasserstein 距離衡量（p.5–6、p.10–11）。</strong> 作者比較模型生成的動作與人類動作的邊際分布，距離越小代表越接近人類玩家的行為範圍。計算方式是從 102,400 個動作（1,024 條軌跡各 100 步）中抽 10,000 個，重複 10 次（p.6）。</p>
+    <ul>
+    <li>所有模型的距離都隨訓練下降，接近「人類對人類」的基準線；均勻隨機動作的距離是 5.3（Fig. 4a，p.6）。</li>
+    <li>1.6B 模型略差於 894M 模型。作者推測是因為畫面 token 更多、詞彙量更大，動作 token 在損失中的比重變小。把動作損失的權重提高 10 倍後，距離有改善（p.5）。</li>
+    <li>定性上，同一個起點可以生成行為不同（例如在出生點繞圈或直奔跳板）與外觀不同（例如懸浮板造型不同）的片段（Fig. 4b，p.6）。</li>
+    </ul>
+    <p><strong>持續性：人工標註（p.5–7、p.11–12）。</strong> 作者手動在畫面中加入三種元件：能量電池（Powercell）、另一名角色、垂直跳板（Vertical Jumppad），放在合理但原本沒有的位置。用 1.6B 模型生成 1 秒的影片，再由標註者判斷元件是否保留。被判為保留的比例如下（Table 1，p.7）：</p>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th>作為條件的修改畫面數</th>
+    <th>Powercell</th>
+    <th>角色</th>
+    <th>Vertical Jumppad</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>1 格</td>
+    <td>58%</td>
+    <td>45%</td>
+    <td>58%</td>
+    </tr>
+    <tr>
+    <td>5 格</td>
+    <td>86%</td>
+    <td>85%</td>
+    <td>98%</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <ul>
+    <li>從 1 格增加到 5 格有顯著提升，從 5 格增加到 10 格則沒有（p.11）。</li>
+    <li>總共生成 600 段影片，由 7 位作者標註，他們不知道每段影片屬於哪種條件。其中 300 段由兩人各自標註，一致率為 90%（p.11）。</li>
+    <li>加入的敵人不只是留在畫面上，還會開始攻擊玩家角色並造成傷害。垂直跳板被放在真實遊戲與訓練資料中都沒有它的區域，仍然被保留（Fig. 5，p.7）。</li>
+    </ul>
+    <p><strong>模型規模（p.10）。</strong> 訓練損失隨模型、資料與運算量穩定改善。作者用 15M 到 206M 模型的結果外推，準確預測了 894M 模型的最終損失，並據此在約 1 × 10²² FLOPS 的運算預算下決定 1.6B 模型的設定。</p>
+    <p><strong>釋出內容（p.12）。</strong> 兩個模型的權重（1.6B 與一個較小的 200M）、WHAM Demonstrator，以及 1,024 條 Skygarden 測試軌跡。</p>
+  </section>
+
+  <section>
+    <h2>限制與未解問題</h2>
+    <p>論文沒有獨立的限制章節，以下整理自各段落：</p>
+    <ul>
+    <li><strong>只有一個遊戲。</strong> 模型只用 Bleeding Edge 訓練。作者預期結果可以在其他遊戲重現，最終泛化到新的遊戲與類型，但這是預期，論文沒有實驗（p.7）。</li>
+    <li><strong>上下文只有 1 秒。</strong> 模型每次只看得到最近 10 格（p.3、p.10）。</li>
+    <li><strong>只修改一格時持續性不足。</strong> 三種元件的保留率都低於 60%（p.7）。部分位置的保留率明顯更低，作者推測原因是修改的元件太小、與背景對比不足，或位置不尋常（p.12；Extended Data Fig. 7，p.20）。</li>
+    <li><strong>持續性的測試條件相當有限。</strong> 只測遊戲中常見的元件與合理的位置，刻意挑選鏡頭與角色移動少的畫面，動作一律設為不操作，而且只看 1 秒（p.11）。作者表示更有想像力的元件留給未來的版本（p.6）。</li>
+    <li><strong>多樣性只衡量動作的邊際分布。</strong> 作者說明可能性的空間太大，所以只聚焦在玩家動作（p.4–5）。規模最大的 1.6B 模型在這項指標上反而略差（p.5）。</li>
+    <li><strong>不是可直接使用的工具。</strong> WHAM Demonstrator 是概念原型，論文沒有評估創作者實際使用它的成效（p.6、p.9）。</li>
+    <li><strong>訓練資料不公開。</strong> 完整資料屬於 Ninja Theory，只釋出測試樣本（p.12）。</li>
+    <li><strong>使用者研究的樣本。</strong> 工作室是從 Microsoft Founders Hub 以方便取樣找來，參與者多數來自美國與英國，27 人中只有 3 位女性（p.9）。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>相關概念</h2>
+    <ul>
+    <li><a href="../concepts/creativity-support.html">創意支援（Creativity Support）</a></li>
+    <li><a href="../concepts/world-model.html">世界模型（World Model）</a></li>
+    <li><a href="../concepts/vector-quantization.html">向量量化（Vector Quantization）</a></li>
+    <li><a href="../concepts/autoregressive-transformer.html">自回歸 Transformer（Autoregressive Transformer）</a></li>
+    <li><a href="../concepts/evaluation-benchmark.html">評測基準（Evaluation Benchmark）</a></li>
+    <li><a href="../concepts/game-rule-understanding.html">遊戲規則理解（Game Rule Understanding）</a></li>
+    <li><a href="../concepts/game-generation.html">遊戲生成（Game Generation）</a></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>與其他來源的關係</h2>
+    <ul>
+    <li><a href="2018-world-models.html">World Models（2018）</a>：本篇直接引用它，並說明自己延續世界模型的研究路線（p.3，參考文獻 39–40）。兩篇的做法都是先把畫面壓縮成精簡的表示，再用序列模型預測接下來的發展。差別在於：那一篇用變分自編碼器加 MDN-RNN，規模很小，目的是訓練代理人；本篇用 VQGAN 加 16 億參數的 transformer，以人類遊玩資料訓練，同時預測畫面與玩家動作，目的是讓人類創作者拿來發想。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>我的筆記</h2>
+    <div class="notes">
+      <p>（擁有者尚未填寫）</p>
+    </div>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>由 AI 依照 CLAUDE.md 的規則撰寫與維護。內容為論文閱讀筆記，請以原論文為準。</p>
+</footer>
+</body>
+</html>

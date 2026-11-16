@@ -1,7 +1,7 @@
 ---
 title: Fine-Tuning
 aliases: [fine-tune, finetuning, supervised fine-tuning]
-updated: 2026-11-16
+updated: 2026-11-17
 sources: [2025-llm-game-rule-understanding]
 ---
 
@@ -36,3 +36,4 @@ The authors also note that performance after fine-tuning is still not satisfacto
 - [Out-of-Distribution Generalization](out-of-distribution-generalization.md): a way to check whether fine-tuning has over-specialized the model.
 - [Game Rule Understanding](game-rule-understanding.md): the ability that fine-tuning aims to improve here.
 - [Agent Memory](agent-memory.md): another way for a system to improve from experience. The difference is that it does not change model parameters.
+- [Reinforcement Learning](reinforcement-learning.md): another training method, which this paper contrasts with fine-tuning.

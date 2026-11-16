@@ -1,8 +1,8 @@
 ---
 title: 評測基準（Evaluation Benchmark）
 aliases: [benchmark, evaluation, 評測, 評估, 基準測試, rubric, 評分準則]
-updated: 2026-11-16
-sources: [2025-llm-game-rule-understanding, 2026-gui-agents-continual-game-generation]
+updated: 2026-11-17
+sources: [2025-llm-game-rule-understanding, 2026-gui-agents-continual-game-generation, 2025-world-and-human-action-models]
 ---
 
 ## 一句話定義
@@ -39,16 +39,31 @@ sources: [2025-llm-game-rule-understanding, 2026-gui-agents-continual-game-gener
 - **評審的驗證**：與人類標註的一致率為 87.9%（κ = 0.66），接近人類彼此之間的 91.4%（κ = 0.68）；換用另外兩個模型當評審，方法的排序不變（p.4–5）。
 - **避免洩漏**：流程中的測試員看不到評分準則，也不負責最終評分（p.5）。
 
+### World and Human Action Models towards gameplay ideation（2025）
+
+[這篇論文](../sources/2025-world-and-human-action-models.md)評測的是**生成模型是否具備支援創作所需的能力**。論文沒有把它稱為 benchmark，而是提出一套評估方法（p.4）。特別之處在於評測項目的來源：先訪談遊戲創作者，再由他們的需求導出一致性、多樣性與持續性三項準則（p.3）。
+
+- **測試資料**：1,024 段沒用於訓練的人類遊玩片段（p.10）。
+- **一致性**：給模型開頭 10 格與玩家的動作，生成 10 秒畫面，與真實影片計算 FVD（p.4、p.10）。標準答案是人類實際玩出來的畫面。
+- **多樣性**：比較模型生成的動作與人類動作的分布，計算 Wasserstein 距離，並以「人類對人類」的距離作為基準線（p.5）。
+- **持續性**：沒有現成指標。由作者手動修改畫面後生成 600 段影片，再由 7 位不知道實驗條件的標註者分類，重複標註的一致率為 90%（p.11）。
+- **指標的驗證**：作者另外用人工逐格標註，確認 FVD 的高低與人感受到的一致性相符（p.10）。
+
+作者主張，為創作而做的模型應該由創作者的需求決定怎麼評估，而機器學習社群目前主要衡量的是任務完成的效果與效率（p.7）。論文釋出了 1,024 條測試軌跡供他人重跑評估（p.12）。
+
 ### 來源之間的比較
 
-| | 2025 規則理解 | 2026 PlaytestArena |
-|---|---|---|
-| 評測對象 | 模型的能力 | 生成出來的遊戲 |
-| 標準答案 | 模擬器自動算出 | 人類撰寫的準則 |
-| 判定方式 | 與標準答案比對 | 代理人遊玩後判定 |
-| 題目來源 | 程式自動產生 | 人類專家撰寫 |
+| | 2025 規則理解 | 2026 PlaytestArena | 2025 WHAM |
+|---|---|---|---|
+| 評測對象 | 模型的能力 | 生成出來的遊戲 | 生成模型的三種能力 |
+| 評測項目從哪裡來 | 研究者定義的任務 | 人類專家撰寫的準則 | 由使用者研究導出 |
+| 標準答案 | 模擬器自動算出 | 人類撰寫的準則 | 人類遊玩紀錄；持續性靠人工判斷 |
+| 判定方式 | 與標準答案比對 | 代理人遊玩後判定 | 分布距離（FVD、Wasserstein）加人工標註 |
+| 題目來源 | 程式自動產生 | 人類專家撰寫 | 從保留的遊玩資料抽樣；修改畫面由作者手動製作 |
 
-前者的問題有明確對錯，可以完全自動化；後者的品質要玩了才知道，所以需要一個會玩的評審，並額外驗證評審是否可靠。兩篇之間沒有互相引用，這段比較是本 Wiki 的整理。
+第一篇的問題有明確對錯，可以完全自動化。第二篇的品質要玩了才知道，所以需要一個會玩的評審，並額外驗證評審是否可靠。第三篇沒有逐題的對錯，改成比較生成結果與人類資料在整體分布上有多接近，同樣需要另外驗證指標是否反映人的判斷。
+
+後兩篇有一個共同點：自動化的評分方式都另外與人類判斷對照過。差別在於 PlaytestArena 驗證的是評審模型，WHAM 驗證的是 FVD 這個指標。三篇之間沒有互相引用，這段比較是本 Wiki 的整理。
 
 ## 相關概念
 
@@ -56,3 +71,5 @@ sources: [2025-llm-game-rule-understanding, 2026-gui-agents-continual-game-gener
 - [遊戲測試（Playtesting）](playtesting.md)：第二篇用來評測的方法。
 - [遊戲描述語言（Game Description Language）](game-description-language.md)：讓題目與答案能自動產生的工具。
 - [分布外泛化（Out-of-Distribution Generalization）](out-of-distribution-generalization.md)：設計測試集時的一種切分方式。
+- [創意支援（Creativity Support）](creativity-support.md)：第三篇的評測項目由此而來。
+- [世界模型（World Model）](world-model.md)：第三篇評測的模型類型。

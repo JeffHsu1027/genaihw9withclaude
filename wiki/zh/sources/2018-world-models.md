@@ -6,7 +6,7 @@ venue: arXiv 1803.10122v4
 url: https://arxiv.org/abs/1803.10122
 raw: raw/world modelv4.pdf
 added: 2026-11-16
-concepts: [world-model, variational-autoencoder, evolution-strategies, out-of-distribution-generalization, game-rule-understanding]
+concepts: [world-model, variational-autoencoder, evolution-strategies, out-of-distribution-generalization, game-rule-understanding, reinforcement-learning]
 ---
 
 ## 一句話總結
@@ -100,10 +100,12 @@ V 與 M 合起來就是[世界模型](../concepts/world-model.md)。
 - [演化策略（Evolution Strategies）](../concepts/evolution-strategies.md)
 - [分布外泛化（Out-of-Distribution Generalization）](../concepts/out-of-distribution-generalization.md)
 - [遊戲規則理解（Game Rule Understanding）](../concepts/game-rule-understanding.md)
+- [強化學習（Reinforcement Learning）](../concepts/reinforcement-learning.md)
 
 ## 與其他來源的關係
 
 - [LLM Game Rule Understanding through Out-of-Distribution Fine-Tuning（2025）](2025-llm-game-rule-understanding.md)：兩篇都要求模型「給定目前狀態與動作，預測下一個狀態」。那一篇把規則以文字明確交給 LLM，並逐題檢查答案；這一篇不提供任何規則，讓神經網路只從畫面學出遊戲如何運作。兩篇也都碰到分布外的問題：那一篇是規則差異太大時微調無效，這一篇是控制器走到訓練資料沒涵蓋的狀態時世界模型會出錯。這一篇發表在前，沒有引用關係，以上是本 Wiki 的整理。
+- [World and Human Action Models towards gameplay ideation（2025）](2025-world-and-human-action-models.md)：那一篇直接引用本篇，並說明自己延續世界模型的研究路線（該論文 p.3）。兩篇都先壓縮畫面，再用序列模型預測接下來的發展。那一篇把變分自編碼器換成 VQGAN、把 MDN-RNN 換成 16 億參數的 transformer，改用人類遊玩資料訓練並同時預測玩家的動作；用途也從訓練代理人變成支援遊戲創作者發想。
 
 ## 我的筆記
 

@@ -1,7 +1,7 @@
 ---
 title: Variational Autoencoder
-aliases: [VAE, autoencoder, latent vector, latent space]
-updated: 2026-11-16
+aliases: [VAE, latent vector, latent space]
+updated: 2026-11-17
 sources: [2018-world-models]
 ---
 
@@ -32,3 +32,4 @@ The paper also points out a limitation of this approach: the VAE is trained as a
 ## Related concepts
 
 - [World Model](world-model.md): here, the VAE is the vision part of the world model.
+- [Vector Quantization](vector-quantization.md): another autoencoder approach to compressing images, which produces discrete tokens instead of a continuous vector.

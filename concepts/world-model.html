@@ -21,22 +21,23 @@
   <span class="tag tag-concept">概念</span>
   <h1>世界模型（World Model）</h1>
   <dl class="meta">
-    <dt>別名</dt><dd>world model、環境模型、dynamics model、動態模型、基於模型的強化學習、model-based RL、MDN-RNN</dd>
-    <dt>最後更新</dt><dd>2026-11-16</dd>
-    <dt>來源數量</dt><dd>1 個來源</dd>
+    <dt>別名</dt><dd>world model、環境模型、dynamics model、動態模型、基於模型的強化學習、model-based RL、MDN-RNN、WHAM</dd>
+    <dt>最後更新</dt><dd>2026-11-17</dd>
+    <dt>來源數量</dt><dd>2 個來源</dd>
   </dl>
 
   <section>
     <h2>一句話定義</h2>
-    <p class="lead">代理人內部對環境的模型，能根據目前的狀態與動作預測接下來會發生什麼。</p>
+    <p class="lead">對環境的模型，能根據目前的狀態與動作預測接下來會發生什麼；可以用來訓練代理人（World Models），也可以直接用來生成內容（WHAM）。</p>
   </section>
 
   <section>
     <h2>說明</h2>
-    <p>強化學習大致有兩條路線。一條不建立環境的模型，直接從嘗試錯誤中學習怎麼行動。另一條先學一個環境的模型，再利用它來規劃或訓練，稱為基於模型的強化學習（model-based RL）。</p>
-    <p>世界模型屬於後者。它通常做兩件事：把高維度的觀察（例如畫面）壓縮成精簡的表示，以及預測這個表示如何隨動作變化。</p>
-    <p>有了世界模型，代理人可以在「想像」中練習，不必每一步都與真實環境互動。當真實互動很慢、很貴或有風險時，這特別有價值。</p>
-    <p>主要的風險是模型不可能完全準確。如果代理人在模型裡學到的做法其實是利用了模型的錯誤，搬到真實環境就會失效。</p>
+    <p>世界模型的想法來自<a href="reinforcement-learning.html">強化學習</a>，它大致有兩條路線。一條不建立環境的模型，直接從嘗試錯誤中學習。另一條先學一個環境的模型，再利用它來規劃或訓練，稱為基於模型的強化學習（model-based RL）。</p>
+    <p>世界模型屬於後者，通常做兩件事：把高維度的觀察（例如畫面）壓縮成精簡的表示，以及預測這個表示如何隨動作變化。</p>
+    <p>有了世界模型，代理人可以在「想像」中練習，不必每一步都接觸真實環境。真實互動很慢、很貴或有風險時特別有價值。</p>
+    <p>主要的風險是模型不可能完全準確：代理人在模型裡學到的做法若利用了模型的錯誤，搬到真實環境就會失效。</p>
+    <p>世界模型也可以不搭配代理人，單獨當作生成模型：給它一段開頭，讓它生成接下來的發展（WHAM）。</p>
   </section>
 
   <section>
@@ -54,17 +55,83 @@
     </ul>
     <p>論文也詳細記錄了風險：控制器會找到利用模型缺陷的策略，例如讓夢境裡的怪物永遠不發射火球（p.8）。作者的對策是讓 M 輸出機率分布，並在取樣時提高溫度 τ 使夢境更難、更隨機。溫度是在真實性與可被利用的程度之間的取捨（p.9）。</p>
     <p>作者指出的限制包括模型容量有限，以及只能一步一步模擬、缺乏階層式規劃（p.12–13）。</p>
+    <h3>World and Human Action Models towards gameplay ideation（2025）</h3>
+    <p><a href="../sources/2025-world-and-human-action-models.html">這篇論文</a>說明自己延續世界模型的研究路線，並引用上面那一篇（p.3）。它的模型 WHAM 同樣分成壓縮與預測兩部分，但元件不同（p.3–4）：</p>
+    <ul>
+    <li><strong>壓縮</strong>：用 VQGAN 把每格畫面轉成 540 個離散 token（見<a href="vector-quantization.html">向量量化</a>）。</li>
+    <li><strong>預測</strong>：用 16 億參數的<a href="autoregressive-transformer.html">自回歸 Transformer</a>，在畫面與手把動作交錯的序列上預測下一個 token。</li>
+    </ul>
+    <p>有三點與上一篇不同：</p>
+    <ul>
+    <li><strong>也預測人的動作。</strong> 模型名稱中的 Human Action 指的就是這件事：它除了預測畫面，也預測玩家接下來會按什麼（p.3）。因此它可以連畫面帶動作一起生成完整的遊玩片段（p.10）。</li>
+    <li><strong>資料來自人類。</strong> 訓練資料是 Bleeding Edge 約 50 萬條玩家軌跡，超過 7 年的遊玩時間（p.3、p.10），而不是隨機策略收集的紀錄。</li>
+    <li><strong>用途是給人看。</strong> 這個世界模型不是用來訓練代理人，而是讓遊戲創作者生成、比較與修改遊玩片段，屬於<a href="creativity-support.html">創意支援</a>（p.1、p.6–7）。</li>
+    </ul>
+    <p>評估方式也跟著改變。論文不看代理人的分數，而是看生成的畫面是否一致（FVD）、動作是否涵蓋人類行為的範圍（Wasserstein 距離），以及使用者的修改是否被保留（p.4–7）。</p>
+    <p>作者表示模型掌握了遊戲環境的 3D 結構、手把動作的效果與遊戲的時間結構（p.3），1.6B 模型可以生成長達 2 分鐘仍然一致的片段（p.4–5）。模型的上下文只有 1 秒（p.3）。</p>
+    <h3>來源之間的比較</h3>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th></th>
+    <th>World Models（2018）</th>
+    <th>WHAM（2025）</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>用途</td>
+    <td>訓練代理人：提供特徵，或取代真實環境</td>
+    <td>讓人類創作者發想</td>
+    </tr>
+    <tr>
+    <td>畫面的表示</td>
+    <td>變分自編碼器的連續潛在向量</td>
+    <td>VQGAN 的離散 token</td>
+    </tr>
+    <tr>
+    <td>序列模型</td>
+    <td>MDN-RNN</td>
+    <td>自回歸 transformer</td>
+    </tr>
+    <tr>
+    <td>預測什麼</td>
+    <td>下一個潛在向量</td>
+    <td>下一格畫面與玩家的下一個動作</td>
+    </tr>
+    <tr>
+    <td>訓練資料</td>
+    <td>隨機策略的遊玩紀錄</td>
+    <td>人類玩家的遊玩紀錄</td>
+    </tr>
+    <tr>
+    <td>環境</td>
+    <td>CarRacing 與 VizDoom</td>
+    <td>3D 多人對戰遊戲 Bleeding Edge</td>
+    </tr>
+    <tr>
+    <td>怎麼評估</td>
+    <td>代理人在真實環境的分數</td>
+    <td>生成片段的一致性、多樣性與持續性</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <p>兩篇的骨架相同：先把畫面壓縮，再預測壓縮後的表示如何變化。七年之間改變的是規模、元件與資料來源，以及世界模型的使用者從代理人變成了人。2018 那篇擔心的是控制器會利用模型的錯誤；2025 這篇關心的是模型能不能被人引導與修改。後者引用了前者，但表中的逐項對照是本 Wiki 的整理。</p>
   </section>
 
   <section>
     <h2>相關概念</h2>
     <ul>
-    <li><a href="variational-autoencoder.html">變分自編碼器（Variational Autoencoder）</a>：世界模型中負責壓縮畫面的部分。</li>
-    <li><a href="evolution-strategies.html">演化策略（Evolution Strategies）</a>：這裡用來訓練控制器的方法。</li>
-    <li><a href="out-of-distribution-generalization.html">分布外泛化（Out-of-Distribution Generalization）</a>：世界模型在訓練資料沒涵蓋的狀態會出錯。</li>
+    <li><a href="variational-autoencoder.html">變分自編碼器（Variational Autoencoder）</a>：World Models（2018）的世界模型中負責壓縮畫面的部分。</li>
+    <li><a href="evolution-strategies.html">演化策略（Evolution Strategies）</a>：World Models（2018）用來訓練控制器的方法。</li>
+    <li><a href="out-of-distribution-generalization.html">分布外泛化（Out-of-Distribution Generalization）</a>：World Models（2018）的世界模型在訓練資料沒涵蓋的狀態會出錯。</li>
     <li><a href="game-rule-understanding.html">遊戲規則理解（Game Rule Understanding）</a>：世界模型從畫面隱含地學到遊戲如何運作。</li>
-    <li>注意：這篇論文的「記憶 M」指神經網路的內部狀態，與<a href="agent-memory.html">代理人記憶（Agent Memory）</a>把經驗寫成文字保存是不同的東西。</li>
-    <li>注意：世界模型模仿的是既有的遊戲，與依描述創造新遊戲的<a href="game-generation.html">遊戲生成（Game Generation）</a>不同。</li>
+    <li><a href="reinforcement-learning.html">強化學習（Reinforcement Learning）</a>：世界模型這個想法的來源，也是 World Models（2018）的問題設定。</li>
+    <li>注意：World Models（2018）的「記憶 M」指神經網路的內部狀態，與<a href="agent-memory.html">代理人記憶（Agent Memory）</a>把經驗寫成文字保存是不同的東西。</li>
+    <li><a href="game-generation.html">遊戲生成（Game Generation）</a>：World Models 的世界模型只模仿既有的遊戲，不創造新內容；WHAM 則把世界模型用來生成供發想用的遊玩片段。</li>
+    <li><a href="vector-quantization.html">向量量化（Vector Quantization）</a>：WHAM 用來壓縮畫面的方法。</li>
+    <li><a href="autoregressive-transformer.html">自回歸 Transformer（Autoregressive Transformer）</a>：WHAM 用來預測未來的模型。</li>
+    <li><a href="creativity-support.html">創意支援（Creativity Support）</a>：WHAM 的世界模型所服務的目的。</li>
     </ul>
   </section>
 </main>

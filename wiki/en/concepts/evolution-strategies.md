@@ -1,7 +1,7 @@
 ---
 title: Evolution Strategies
 aliases: [ES, CMA-ES, evolutionary algorithm, black-box optimization]
-updated: 2026-11-16
+updated: 2026-11-17
 sources: [2018-world-models]
 ---
 
@@ -35,3 +35,4 @@ In the experiments, multiple rollouts run in parallel on the CPU cores of a sing
 ## Related concepts
 
 - [World Model](world-model.md): provides the representation the controller needs, which is what allows the controller to be small.
+- [Reinforcement Learning](reinforcement-learning.md): here, evolution strategies take the place of a usual reinforcement learning algorithm for training the controller.

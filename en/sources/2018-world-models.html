@@ -190,6 +190,7 @@
     <li><a href="../concepts/evolution-strategies.html">Evolution Strategies</a></li>
     <li><a href="../concepts/out-of-distribution-generalization.html">Out-of-Distribution Generalization</a></li>
     <li><a href="../concepts/game-rule-understanding.html">Game Rule Understanding</a></li>
+    <li><a href="../concepts/reinforcement-learning.html">Reinforcement Learning</a></li>
     </ul>
   </section>
 
@@ -197,6 +198,7 @@
     <h2>Relation to other sources</h2>
     <ul>
     <li><a href="2025-llm-game-rule-understanding.html">LLM Game Rule Understanding through Out-of-Distribution Fine-Tuning (2025)</a>: both papers ask a model to predict the next state given the current state and an action. That paper hands the rules to an LLM explicitly as text and checks each answer. This paper provides no rules at all and lets a neural network learn how the game works from frames alone. Both also run into an out-of-distribution problem: there, fine-tuning stops helping when the rules differ too much; here, the world model is wrong when the controller reaches states the training data did not cover. This paper was published earlier and there is no citation between them; the comparison is this wiki's own synthesis.</li>
+    <li><a href="2025-world-and-human-action-models.html">World and Human Action Models towards gameplay ideation (2025)</a>: that paper cites this one directly and states that it builds on the line of work on world models (p.3 of that paper). Both first compress frames and then use a sequence model to predict what comes next. That paper replaces the variational autoencoder with a VQGAN and the MDN-RNN with a 1.6-billion-parameter transformer, trains on human gameplay, and also predicts the player's actions; the purpose also changes from training an agent to supporting game creatives in ideation.</li>
     </ul>
   </section>
 

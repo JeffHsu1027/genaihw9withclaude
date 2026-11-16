@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vector Quantization | Games × AI Paper Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">Games × AI Paper Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a>
+    <a class="lang-switch" href="../../concepts/vector-quantization.html" lang="zh-Hant">中文</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">Concept</span>
+  <h1>Vector Quantization</h1>
+  <dl class="meta">
+    <dt>Aliases</dt><dd>VQ, VQ-VAE, VQGAN, ViT-VQGAN, discrete token, image tokenizer, codebook</dd>
+    <dt>Last updated</dt><dd>2026-11-17</dd>
+    <dt>Sources</dt><dd>1 source</dd>
+  </dl>
+
+  <section>
+    <h2>One-line definition</h2>
+    <p class="lead">Replacing a continuous vector with the closest entry in a finite codebook, so that data can be represented as a sequence of discrete indices.</p>
+  </section>
+
+  <section>
+    <h2>Explanation</h2>
+    <p>Language models work on discrete tokens, but an image is made of continuous pixels. Vector quantization is a common way to turn images into tokens as well.</p>
+    <p>The process is as follows. An encoder first compresses the image into a small grid of vectors. Each vector is then replaced by the closest entry in a codebook, and only the index of that entry is kept. An image thus becomes a sequence of integers. A decoder reconstructs an approximate image from these indices. The size of the codebook is the "vocabulary size".</p>
+    <p>VQ-VAE is the standard example of this approach. VQGAN adds a perceptual loss and an adversarial loss during training, so that reconstructed images still look sharp at high compression.</p>
+    <p>The main trade-off is the number of tokens. More tokens per image give better reconstruction, but the sequence gets longer, the downstream model gets slower, and fewer images fit in the same context length.</p>
+  </section>
+
+  <section>
+    <h2>What each source says</h2>
+    <h3>World and Human Action Models towards gameplay ideation (2025)</h3>
+    <p><a href="../sources/2025-world-and-human-action-models.html">This paper</a> uses a VQGAN to turn each game frame into discrete tokens. The authors describe framing the data as a sequence of discrete tokens as critical to their approach (p.3).</p>
+    <p>The paper trains two encoders (p.10):</p>
+    <ul>
+    <li>Smaller models (15M–894M): a VQGAN of about 60M parameters that encodes a 128 × 128 frame into 256 tokens, with a vocabulary of 4,096.</li>
+    <li>The 1.6B model: a ViT-VQGAN of about 300M parameters that encodes a frame at the native 300 × 180 resolution into 540 tokens, with a vocabulary of 16,384.</li>
+    </ul>
+    <p>Both are first trained with a reconstruction loss and a perceptual loss, and then with a GAN loss as well (p.10).</p>
+    <p>The authors point out that the number of tokens per frame is a key hyperparameter that trades off image quality against generation speed and context length (p.3). Both sides of the trade-off are visible in the paper:</p>
+    <ul>
+    <li>The 1.6B model uses a higher resolution, so the ceiling on reconstruction quality is higher, and its consistency metric, FVD, is better (p.4).</li>
+    <li>The same model is slightly worse on action diversity. The authors hypothesize that more image tokens and a larger vocabulary reduce the weight of the action tokens in the loss (p.5).</li>
+    </ul>
+    <p>Controller actions are discretized too: buttons are already discrete, and joystick coordinates are split into 11 buckets (p.3). This step is direct bucketing and does not use a codebook.</p>
+  </section>
+
+  <section>
+    <h2>Related concepts</h2>
+    <ul>
+    <li><a href="variational-autoencoder.html">Variational Autoencoder</a>: also compresses an image into a compact representation, but produces a continuous vector.</li>
+    <li><a href="autoregressive-transformer.html">Autoregressive Transformer</a>: takes these discrete tokens and predicts the next one.</li>
+    <li><a href="world-model.html">World Model</a>: here, vector quantization handles the part of the world model that compresses frames.</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>Written and maintained by AI following the rules in CLAUDE.md. These are reading notes; the original papers are authoritative.</p>
+</footer>
+</body>
+</html>

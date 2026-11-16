@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>強化學習（Reinforcement Learning）｜遊戲 × AI 論文 Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">遊戲 × AI 論文 Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">首頁</a>
+    <a class="lang-switch" href="../en/concepts/reinforcement-learning.html" lang="en">English</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">概念</span>
+  <h1>強化學習（Reinforcement Learning）</h1>
+  <dl class="meta">
+    <dt>別名</dt><dd>RL、reinforcement learning、深度強化學習、deep RL、無模型強化學習、model-free RL、功勞分配、credit assignment、策略、policy、獎勵、reward</dd>
+    <dt>最後更新</dt><dd>2026-11-17</dd>
+    <dt>來源數量</dt><dd>2 個來源</dd>
+  </dl>
+
+  <section>
+    <h2>一句話定義</h2>
+    <p class="lead">讓代理人透過與環境互動、依得到的獎勵調整行為，逐步學會能取得最多累積獎勵的做法。</p>
+  </section>
+
+  <section>
+    <h2>說明</h2>
+    <p>強化學習的設定是一個迴圈：代理人觀察環境的狀態，選一個動作，環境回傳新的狀態與一個獎勵分數。代理人要學的是策略（policy），也就是在每種狀態下該做什麼。</p>
+    <p>它與監督式學習的差別在於沒有人提供正確答案。代理人只知道結果好不好，必須自己嘗試。獎勵又常常來得很晚，例如整場遊戲結束才知道輸贏，很難判斷是先前哪一步造成的。這稱為功勞分配（credit assignment）問題。</p>
+    <p>做法上分成兩類。無模型（model-free）的方法直接從嘗試錯誤中學習策略。基於模型（model-based）的方法先學一個環境的模型，再用它來規劃或訓練。</p>
+    <p>強化學習擅長需要在許多可能的動作中搜尋的問題，代價是通常需要大量的互動。</p>
+  </section>
+
+  <section>
+    <h2>各來源怎麼說</h2>
+    <h3>World Models（2018）</h3>
+    <p><a href="../sources/2018-world-models.html">這篇論文</a>以強化學習為問題設定，但對直接使用它有所保留。</p>
+    <ul>
+    <li><strong>出發點</strong>：強化學習的代理人會受益於好的狀態表示與對未來的預測模型（p.2）。</li>
+    <li><strong>對現有做法的批評</strong>：無模型的強化學習方法多半只用參數很少的小網路。作者認為原因是強化學習演算法常受限於功勞分配問題，難以訓練大型模型的數百萬個權重（p.2）。</li>
+    <li><strong>論文的回應</strong>：把代理人拆開。大的<a href="world-model.html">世界模型</a>用無監督方式與反向傳播訓練，完全不碰獎勵；接觸獎勵的只有一個很小的控制器，而且用<a href="evolution-strategies.html">演化策略</a>而不是常見的強化學習演算法來訓練，只需要整場的累積獎勵（p.4、p.12）。</li>
+    <li><strong>比較對象</strong>：賽車任務中，DQN 得到 343 ± 18 分，A3C 得到 591 ± 45（連續動作）與 652 ± 10（離散動作），完整的世界模型代理人為 906 ± 21（Table 1，p.6）。</li>
+    <li><strong>基於模型的路線</strong>：作者指出，許多先前研究雖然學了環境的動態模型，卻沒有真的用它完全取代真實環境，可能的原因是不完美的模型容易被代理人利用（p.9）。</li>
+    </ul>
+    <p>作者也引用其他研究，說明演化策略是深度強化學習方法之外可行的選擇（p.12）。</p>
+    <h3>LLM Game Rule Understanding through Out-of-Distribution Fine-Tuning（2025）</h3>
+    <p><a href="../sources/2025-llm-game-rule-understanding.html">這篇論文</a>沒有使用強化學習。強化學習在文中是被拿來對照的另一條路線。</p>
+    <ul>
+    <li>作者提到，LLM 與蒙地卡羅樹搜尋（MCTS）等搜尋演算法或其他強化學習方法搭配時，玩遊戲或預測下一狀態的表現可以提升（p.1）。</li>
+    <li>相關研究 Chu et al. 在 General Points 遊戲上比較兩種後訓練方式，結果顯示<a href="fine-tuning.html">微調</a>會降低<a href="out-of-distribution-generalization.html">分布外</a>規則集的表現，強化學習則會提升（p.3）。</li>
+    <li>作者說明自己為何不採用：本文只用遊戲推進題，不需要搜尋動作空間，而搜尋正是強化學習演算法擅長的部分。他們的目的是單純衡量規則是否被正確理解與套用（p.3）。</li>
+    <li>在未來方向中，作者把用強化學習的策略改善推理步驟列為可能的改進方式之一（p.9）。</li>
+    </ul>
+    <h3>來源之間的比較</h3>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th></th>
+    <th>World Models（2018）</th>
+    <th>2025 規則理解</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>強化學習的角色</td>
+    <td>問題設定與比較對象</td>
+    <td>沒有使用，是被拿來對照的另一種訓練方式</td>
+    </tr>
+    <tr>
+    <td>指出的特性</td>
+    <td>受功勞分配問題限制，難以直接訓練大型模型</td>
+    <td>擅長搜尋動作空間</td>
+    </tr>
+    <tr>
+    <td>論文改用什麼</td>
+    <td>無監督訓練的世界模型，加上以演化策略訓練的小控制器</td>
+    <td>監督式微調</td>
+    </tr>
+    <tr>
+    <td>理由</td>
+    <td>把大部分參數移到不需要獎勵訊號的部分</td>
+    <td>題目不需要搜尋，只想衡量規則理解</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <p>兩篇都把強化學習當作背景，並各自選了別的訓練方式，但理由不同。World Models 是因為強化學習難以訓練大模型而繞開它；規則理解那篇是因為研究的問題用不到它的長處。兩篇之間沒有引用關係，這段比較是本 Wiki 的整理。</p>
+  </section>
+
+  <section>
+    <h2>相關概念</h2>
+    <ul>
+    <li><a href="world-model.html">世界模型（World Model）</a>：基於模型的強化學習所學的環境模型。</li>
+    <li><a href="evolution-strategies.html">演化策略（Evolution Strategies）</a>：World Models（2018）用來取代一般強化學習演算法、訓練控制器的方法。</li>
+    <li><a href="fine-tuning.html">微調（Fine-Tuning）</a>：另一種訓練方式，2025 規則理解那篇把它與強化學習對照。</li>
+    <li><a href="out-of-distribution-generalization.html">分布外泛化（Out-of-Distribution Generalization）</a>：有研究指出強化學習與微調對分布外表現的影響相反。</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>由 AI 依照 CLAUDE.md 的規則撰寫與維護。內容為論文閱讀筆記，請以原論文為準。</p>
+</footer>
+</body>
+</html>

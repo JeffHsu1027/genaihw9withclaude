@@ -1,7 +1,7 @@
 ---
 title: 變分自編碼器（Variational Autoencoder）
-aliases: [VAE, 自編碼器, autoencoder, 潛在向量, latent vector, 潛在空間, latent space]
-updated: 2026-11-16
+aliases: [VAE, 潛在向量, latent vector, 潛在空間, latent space]
+updated: 2026-11-17
 sources: [2018-world-models]
 ---
 
@@ -32,3 +32,4 @@ VAE 的訓練不需要標籤，屬於無監督學習。它常被用來把高維�
 ## 相關概念
 
 - [世界模型（World Model）](world-model.md)：VAE 在這裡是世界模型的視覺部分。
+- [向量量化（Vector Quantization）](vector-quantization.md)：另一種壓縮影像的自編碼器做法，得到的是離散 token 而不是連續向量。

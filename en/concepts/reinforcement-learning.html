@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reinforcement Learning | Games × AI Paper Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">Games × AI Paper Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a>
+    <a class="lang-switch" href="../../concepts/reinforcement-learning.html" lang="zh-Hant">中文</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">Concept</span>
+  <h1>Reinforcement Learning</h1>
+  <dl class="meta">
+    <dt>Aliases</dt><dd>RL, deep reinforcement learning, deep RL, model-free RL, credit assignment, policy, reward</dd>
+    <dt>Last updated</dt><dd>2026-11-17</dd>
+    <dt>Sources</dt><dd>2 sources</dd>
+  </dl>
+
+  <section>
+    <h2>One-line definition</h2>
+    <p class="lead">Having an agent interact with an environment and adjust its behavior according to the rewards it receives, so that it gradually learns how to collect the most cumulative reward.</p>
+  </section>
+
+  <section>
+    <h2>Explanation</h2>
+    <p>Reinforcement learning is set up as a loop: the agent observes the state of the environment and picks an action, and the environment returns a new state and a reward. What the agent has to learn is a policy, that is, what to do in each state.</p>
+    <p>The difference from supervised learning is that nobody provides the right answer. The agent only finds out whether the outcome was good and has to try things for itself. Rewards also often arrive late; for example, a win or loss is only known when the game ends, and it is hard to tell which earlier step caused it. This is called the credit assignment problem.</p>
+    <p>There are two families of methods. Model-free methods learn a policy directly from trial and error. Model-based methods first learn a model of the environment and then use it for planning or training.</p>
+    <p>Reinforcement learning is good at problems that require searching among many possible actions; the price is that it usually needs a great deal of interaction.</p>
+  </section>
+
+  <section>
+    <h2>What each source says</h2>
+    <h3>World Models (2018)</h3>
+    <p><a href="../sources/2018-world-models.html">This paper</a> takes reinforcement learning as its problem setting but has reservations about using it directly.</p>
+    <ul>
+    <li><strong>Starting point</strong>: a reinforcement learning agent benefits from a good representation of states and a predictive model of the future (p.2).</li>
+    <li><strong>Criticism of existing practice</strong>: model-free reinforcement learning methods mostly use small networks with few parameters. The authors attribute this to the fact that the reinforcement learning algorithm is often bottlenecked by the credit assignment problem, which makes it hard to learn the millions of weights of a large model (p.2).</li>
+    <li><strong>The paper's response</strong>: split the agent. The large <a href="world-model.html">world model</a> is trained without supervision by backpropagation and never touches the reward. Only a very small controller sees the reward, and it is trained with <a href="evolution-strategies.html">evolution strategies</a> instead of a usual reinforcement learning algorithm, needing only the cumulative reward of a whole rollout (p.4, p.12).</li>
+    <li><strong>Baselines</strong>: in car racing, DQN scores 343 ± 18 and A3C scores 591 ± 45 (continuous actions) and 652 ± 10 (discrete actions), while the full world model agent scores 906 ± 21 (Table 1, p.6).</li>
+    <li><strong>The model-based route</strong>: the authors note that many earlier works learned a dynamics model of the environment but did not actually use it to fully replace the actual environment, possibly because an imperfect model is easily exploited by the agent (p.9).</li>
+    </ul>
+    <p>The authors also cite other work showing that evolution strategies are a viable alternative to deep reinforcement learning methods (p.12).</p>
+    <h3>LLM Game Rule Understanding through Out-of-Distribution Fine-Tuning (2025)</h3>
+    <p><a href="../sources/2025-llm-game-rule-understanding.html">This paper</a> does not use reinforcement learning. In the paper it is the other route that the authors compare themselves with.</p>
+    <ul>
+    <li>The authors mention that an LLM's performance at playing games or predicting the next state can be improved when it is paired with search algorithms such as Monte Carlo Tree Search (MCTS) or other reinforcement learning methods (p.1).</li>
+    <li>A related study, Chu et al., compares two kinds of post-training on the game General Points. Its results suggest that <a href="fine-tuning.html">fine-tuning</a> degrades performance on <a href="out-of-distribution-generalization.html">out-of-distribution</a> rulesets, while reinforcement learning improves it (p.3).</li>
+    <li>The authors explain why they do not adopt it: this paper uses only game progression questions, which need no search over the action space, and search is exactly what reinforcement learning algorithms excel at. Their goal is purely to measure whether rules are understood and applied correctly (p.3).</li>
+    <li>Among future directions, the authors list using reinforcement learning strategies to improve reasoning steps as one possible improvement (p.9).</li>
+    </ul>
+    <h3>Comparing the sources</h3>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th></th>
+    <th>World Models (2018)</th>
+    <th>2025 rule understanding</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>Role of reinforcement learning</td>
+    <td>The problem setting and the baseline</td>
+    <td>Not used; another training method the paper compares itself with</td>
+    </tr>
+    <tr>
+    <td>Property pointed out</td>
+    <td>Limited by the credit assignment problem, so hard to train a large model directly</td>
+    <td>Good at searching the action space</td>
+    </tr>
+    <tr>
+    <td>What the paper uses instead</td>
+    <td>A world model trained without supervision, plus a small controller trained with evolution strategies</td>
+    <td>Supervised fine-tuning</td>
+    </tr>
+    <tr>
+    <td>Reason</td>
+    <td>Moves most parameters into a part that needs no reward signal</td>
+    <td>The questions need no search; the paper only wants to measure rule understanding</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <p>Both papers treat reinforcement learning as background and choose a different training method, but for different reasons. World Models goes around it because it is hard to train a large model with it. The rule-understanding paper does so because its research question has no use for what reinforcement learning is good at. There is no citation between the two papers; this comparison is this wiki's own synthesis.</p>
+  </section>
+
+  <section>
+    <h2>Related concepts</h2>
+    <ul>
+    <li><a href="world-model.html">World Model</a>: the model of the environment that model-based reinforcement learning learns.</li>
+    <li><a href="evolution-strategies.html">Evolution Strategies</a>: the method World Models (2018) uses to train the controller in place of a usual reinforcement learning algorithm.</li>
+    <li><a href="fine-tuning.html">Fine-Tuning</a>: another training method, which the 2025 rule-understanding paper contrasts with reinforcement learning.</li>
+    <li><a href="out-of-distribution-generalization.html">Out-of-Distribution Generalization</a>: one study reports that reinforcement learning and fine-tuning affect out-of-distribution performance in opposite directions.</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>Written and maintained by AI following the rules in CLAUDE.md. These are reading notes; the original papers are authoritative.</p>
+</footer>
+</body>
+</html>

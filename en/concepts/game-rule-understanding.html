@@ -22,8 +22,8 @@
   <h1>Game Rule Understanding</h1>
   <dl class="meta">
     <dt>Aliases</dt><dd>rule understanding, game progression, next-state prediction</dd>
-    <dt>Last updated</dt><dd>2026-11-16</dd>
-    <dt>Sources</dt><dd>2 sources</dd>
+    <dt>Last updated</dt><dd>2026-11-17</dd>
+    <dt>Sources</dt><dd>3 sources</dd>
   </dl>
 
   <section>
@@ -52,6 +52,17 @@
     <p><a href="../sources/2018-world-models.html">This paper</a> does not use the term "rule understanding"; including it on this page is this wiki's own judgment. The reason is that its <a href="world-model.html">world model</a> does the same thing as game progression: given the current state and an action, predict the next state.</p>
     <p>The difference is that nobody tells the model the rules. Seeing only frames from random play, the world model learns to simulate the game logic, enemy behaviour, and physics. The paper's examples include: the view shifts accordingly when the agent chooses to move left, the agent is blocked from moving beyond the walls on both sides, several fireballs are tracked along their directions at once, and the model detects whether the agent has been hit (p.8).</p>
     <p>This understanding is incomplete. The world model does not even reproduce the number of monsters exactly, and it occasionally generates trajectories that do not follow the laws of the actual environment (p.8). The controller also found a way to make monsters never shoot fireballs, which cannot happen in the real game (p.8).</p>
+    <h3>World and Human Action Models towards gameplay ideation (2025)</h3>
+    <p><a href="../sources/2025-world-and-human-action-models.html">This paper</a> does not use the term "rule understanding" either; including it on this page is this wiki's judgement. The reason is that its notion of "consistency" explicitly includes following the game mechanics: generated frames must not only be coherent over time but also match how the game works. For example, solid objects do not pass through walls, and objects do not disappear without cause (p.3–4).</p>
+    <p>This requirement comes from users. The creatives interviewed note that current generative AI is not good at continuing to generate while also following specific rules and mechanics (p.2).</p>
+    <p>As in World Models, nobody tells the model the rules. The authors stress that WHAM learned these structures entirely from gameplay data, with no previous domain knowledge (p.7).</p>
+    <p>There are two layers of checking (p.4, p.10):</p>
+    <ul>
+    <li><strong>Automatic metric</strong>: the model is given the same actions as a real player, and the generated frames are compared with the real frames (FVD).</li>
+    <li><strong>Human annotation</strong>: two annotators judge three things frame by frame: whether the level structure stays consistent; whether the character responds to the given actions, such as moving, jumping, or attacking; and whether the character interacts correctly with the environment, such as climbing stairs with the right animation and not moving through walls and the floor.</li>
+    </ul>
+    <p>One example shows that the model has captured more than the look of the frames: after a user inserts an opponent into a frame, the opponent in the generated clip starts attacking the player character and inflicts damage (Fig. 5, p.7).</p>
+    <p>This understanding is also incomplete. Of the 600 videos in the persistency experiment, 7 were labelled unusable because they were visually distorted or showed implausible continuations (p.11).</p>
     <h3>Comparing the sources</h3>
     <div class="table-wrap"><table>
     <thead>
@@ -59,6 +70,7 @@
     <th></th>
     <th>2025 rule understanding</th>
     <th>2018 World Models</th>
+    <th>2025 WHAM</th>
     </tr>
     </thead>
     <tbody>
@@ -66,30 +78,37 @@
     <td>Where the rules come from</td>
     <td>Given explicitly as text</td>
     <td>Not given; learned from frame data</td>
+    <td>Not given; learned from human gameplay data</td>
     </tr>
     <tr>
     <td>Model</td>
     <td>LLM</td>
     <td>VAE plus MDN-RNN</td>
+    <td>VQGAN plus transformer</td>
     </tr>
     <tr>
     <td>Form of the state</td>
     <td>A game state written as text</td>
     <td>A latent vector compressed from a frame</td>
+    <td>Discrete tokens converted from a frame</td>
     </tr>
     <tr>
     <td>How it is checked</td>
     <td>Each answer is compared for legality and next state</td>
     <td>Not checked directly; judged by whether an agent trained inside it can solve the real environment</td>
+    <td>Compared with real frames (FVD), and annotated frame by frame by humans</td>
     </tr>
     <tr>
     <td>Do the rules change</td>
     <td>Yes; unseen rulesets are tested</td>
     <td>No; each model corresponds to one game</td>
+    <td>No; trained on a single game</td>
     </tr>
     </tbody>
     </table></div>
-    <p>"Understanding the rules" means different things in the two papers. In the 2025 paper it means reasoning correctly from explicit rules, verifiable question by question. In the 2018 paper the model can produce subsequent frames that roughly follow the rules, but it cannot state what the rules are and is not checked step by step. Calling both rule understanding is a broad usage. The definition at the top of this page is this wiki's working definition, not a standard definition in the field. There is no citation between the two papers; this comparison is this wiki's own synthesis.</p>
+    <p>"Understanding the rules" means different things in the three papers. In the 2025 rule-understanding paper it means reasoning correctly from explicit rules, verifiable question by question. In the other two, the model can produce subsequent frames that roughly follow the rules, but it cannot state what the rules are.</p>
+    <p>The two world-model papers also differ from each other. The 2018 paper does not check step by step whether the model follows the rules. The WHAM paper makes "consistent with the game mechanics" an explicit evaluation item and has people check it frame by frame.</p>
+    <p>Calling all three rule understanding is a broad usage. The definition at the top of this page is this wiki's working definition, not a standard definition in the field. WHAM cites World Models; there is no other citation among the papers. This comparison is this wiki's own synthesis.</p>
   </section>
 
   <section>
@@ -101,6 +120,7 @@
     <li><a href="world-model.html">World Model</a>: learns to predict the next state from data, without explicit rules.</li>
     <li><a href="evaluation-benchmark.html">Evaluation Benchmark</a>: how rule understanding is measured.</li>
     <li><a href="game-generation.html">Game Generation</a>: a further goal that depends on rule understanding.</li>
+    <li><a href="creativity-support.html">Creativity Support</a>: creatives require generated content to follow the game mechanics, which is called consistency.</li>
     </ul>
   </section>
 </main>

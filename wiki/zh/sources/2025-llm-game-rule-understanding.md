@@ -6,7 +6,7 @@ venue: AIIDE 2025（第 21 屆 AAAI 人工智慧與互動數位娛樂研討會�
 url: https://doi.org/10.1609/aiide.v21i1.36804
 raw: raw/LLM game rule understanding through out-of-distribution fine-tuning.pdf
 added: 2026-11-16
-concepts: [game-rule-understanding, out-of-distribution-generalization, fine-tuning, game-description-language, evaluation-benchmark, game-generation]
+concepts: [game-rule-understanding, out-of-distribution-generalization, fine-tuning, game-description-language, evaluation-benchmark, game-generation, reinforcement-learning]
 ---
 
 ## 一句話總結
@@ -86,6 +86,7 @@ concepts: [game-rule-understanding, out-of-distribution-generalization, fine-tun
 - [遊戲描述語言（Game Description Language）](../concepts/game-description-language.md)
 - [評測基準（Evaluation Benchmark）](../concepts/evaluation-benchmark.md)
 - [遊戲生成（Game Generation）](../concepts/game-generation.md)
+- [強化學習（Reinforcement Learning）](../concepts/reinforcement-learning.md)
 
 ## 與其他來源的關係
 

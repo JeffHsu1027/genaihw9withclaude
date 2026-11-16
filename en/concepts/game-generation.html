@@ -21,19 +21,19 @@
   <span class="tag tag-concept">Concept</span>
   <h1>Game Generation</h1>
   <dl class="meta">
-    <dt>Aliases</dt><dd>AI game generation, game code generation, rule generation</dd>
-    <dt>Last updated</dt><dd>2026-11-16</dd>
-    <dt>Sources</dt><dd>2 sources</dd>
+    <dt>Aliases</dt><dd>AI game generation, game code generation, rule generation, gameplay generation, procedural content generation, PCG</dd>
+    <dt>Last updated</dt><dd>2026-11-17</dd>
+    <dt>Sources</dt><dd>3 sources</dd>
   </dl>
 
   <section>
     <h2>One-line definition</h2>
-    <p class="lead">Having AI automatically produce a game, or part of one such as code, rules, or levels, from a natural-language description.</p>
+    <p class="lead">Having AI automatically produce a game, or part of one such as code, rules, levels, or gameplay clips, from a prompt given by a person, such as a natural-language description or reference frames.</p>
   </section>
 
   <section>
     <h2>Explanation</h2>
-    <p>Game generation can happen at different levels. The most complete form produces a runnable game program directly. More partial forms produce rules, levels, or assets that an existing engine then runs.</p>
+    <p>Game generation can happen at different levels. The most complete form produces a runnable game program directly. More partial forms produce rules, levels, or assets that an existing engine then runs. Another approach produces no program at all and has a model generate the frames of gameplay directly.</p>
     <p>It is harder than ordinary code generation because "correct" is hard to define. A program that runs is not necessarily a game that can be played, and a game that can be played does not necessarily match the intended design. Research on game generation therefore often has to deal with two problems at once: how to generate, and how to tell whether the result is good.</p>
   </section>
 
@@ -50,8 +50,54 @@
     <h3>LLM Game Rule Understanding through Out-of-Distribution Fine-Tuning (2025)</h3>
     <p><a href="../sources/2025-llm-game-rule-understanding.html">This paper</a> does not generate games itself, but treats generation as a long-term goal. Its concern is the level of rules: it hopes LLMs can evaluate, modify, or generate rules during game development (p.1).</p>
     <p>The paper calls such tasks "rule space" and notes that they require the model to consider all possible states and actions, which is harder than working out a single step (p.3). The authors hold that to get there, a model must first understand rules and generalize to unseen ones, so the paper starts with the more basic problem of <a href="game-rule-understanding.html">game rule understanding</a> (p.1, p.3).</p>
+    <h3>World and Human Action Models towards gameplay ideation (2025)</h3>
+    <p>What <a href="../sources/2025-world-and-human-action-models.html">this paper</a> generates is not a runnable game but gameplay clips: sequences of game frames and the player's controller actions (p.3). Including it on this page is a broad usage. The paper positions itself as building on the research tradition of computational creativity and procedural content generation (p.1).</p>
+    <p>It differs from the two papers above in several ways:</p>
+    <ul>
+    <li><strong>Output</strong>: the frames are generated directly by WHAM, a <a href="world-model.html">world model</a>, with no game program or explicit rules behind them (p.3).</li>
+    <li><strong>Prompting</strong>: there is no text description. The user picks some frames as the starting point and can also edit frames directly or supply controller actions to steer the generation (p.7).</li>
+    <li><strong>Purpose</strong>: not to produce a finished product, but to let creatives quickly see several possible developments during ideation (p.6–7). The authors state that this is not a tool that can be readily integrated into a development process (p.9).</li>
+    <li><strong>Scope</strong>: the model is trained on a single existing game, and everything it generates stays within that game (p.3). A user can place an element where it did not exist before, but the paper does not demonstrate generating a new game.</li>
+    </ul>
+    <p>The authors see the value of such models in their ability to learn the structure of a complex domain from data, removing the need to handcraft it for each domain (p.1, p.7).</p>
     <h3>Comparing the sources</h3>
-    <p>The two papers work at different levels. The first generates an entire runnable game and judges quality from the behavior of the finished product. The second is concerned with the rules themselves and regards understanding rules as a prerequisite for generating them. Neither paper cites the other; this comparison is this wiki's own synthesis.</p>
+    <div class="table-wrap"><table>
+    <thead>
+    <tr>
+    <th></th>
+    <th>2026 GUI Agents</th>
+    <th>2025 rule understanding</th>
+    <th>2025 WHAM</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+    <td>What is generated</td>
+    <td>Runnable web games</td>
+    <td>Nothing; rule generation is a long-term goal</td>
+    <td>Gameplay clips (frames and actions)</td>
+    </tr>
+    <tr>
+    <td>Prompt</td>
+    <td>A text description</td>
+    <td>(Not applicable)</td>
+    <td>Starting frames, edited frames, controller actions</td>
+    </tr>
+    <tr>
+    <td>How quality is judged</td>
+    <td>An agent plays and judges against a rubric</td>
+    <td>Each answer is checked for correct application of the rules</td>
+    <td>Consistency, diversity, and persistency</td>
+    </tr>
+    <tr>
+    <td>The human's role</td>
+    <td>Provides prompts and rubrics</td>
+    <td>Designs rules and questions</td>
+    <td>Repeatedly selects and edits during generation</td>
+    </tr>
+    </tbody>
+    </table></div>
+    <p>The three papers work at different levels. GUI Agents generates an entire runnable game and judges quality from the behavior of the finished product. The rule-understanding paper is concerned with the rules themselves and regards understanding rules as a prerequisite for generating them. WHAM does not produce the game itself; it generates clips of "what playing it might look like" for people to ideate with before they start building. None of the three papers cites another; this comparison is this wiki's own synthesis.</p>
   </section>
 
   <section>
@@ -60,6 +106,8 @@
     <li><a href="playtesting.html">Playtesting</a>: a way to tell whether a generated result can be played.</li>
     <li><a href="game-rule-understanding.html">Game Rule Understanding</a>: the ability that generating and modifying rules depends on.</li>
     <li><a href="evaluation-benchmark.html">Evaluation Benchmark</a>: how generation quality is measured.</li>
+    <li><a href="world-model.html">World Model</a>: a model that generates gameplay frames directly, without writing a program.</li>
+    <li><a href="creativity-support.html">Creativity Support</a>: generation used to help people ideate, not to produce a finished product.</li>
     </ul>
   </section>
 </main>

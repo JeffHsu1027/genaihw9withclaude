@@ -1,7 +1,7 @@
 ---
 title: 微調（Fine-Tuning）
 aliases: [fine-tune, finetuning, 監督式微調]
-updated: 2026-11-16
+updated: 2026-11-17
 sources: [2025-llm-game-rule-understanding]
 ---
 
@@ -36,3 +36,4 @@ sources: [2025-llm-game-rule-understanding]
 - [分布外泛化（Out-of-Distribution Generalization）](out-of-distribution-generalization.md)：檢驗微調是否過度專精的方式。
 - [遊戲規則理解（Game Rule Understanding）](game-rule-understanding.md)：這裡微調要改善的能力。
 - [代理人記憶（Agent Memory）](agent-memory.md)：另一種讓系統從經驗進步的方式，差別在於不改變模型參數。
+- [強化學習（Reinforcement Learning）](reinforcement-learning.md)：另一種訓練方式，這篇論文把它與微調對照。

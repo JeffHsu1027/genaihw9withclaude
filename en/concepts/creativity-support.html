@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creativity Support | Games × AI Paper Wiki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-name" href="../index.html">Games × AI Paper Wiki</a>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a>
+    <a class="lang-switch" href="../../concepts/creativity-support.html" lang="zh-Hant">中文</a>
+  </nav>
+</header>
+<main class="page page-concept">
+  <span class="tag tag-concept">Concept</span>
+  <h1>Creativity Support</h1>
+  <dl class="meta">
+    <dt>Aliases</dt><dd>creativity support tool, creative ideation, ideation, divergent thinking, iterative practice, consistency, diversity, persistency</dd>
+    <dt>Last updated</dt><dd>2026-11-17</dd>
+    <dt>Sources</dt><dd>1 source</dd>
+  </dl>
+
+  <section>
+    <h2>One-line definition</h2>
+    <p class="lead">Using tools to help people produce and develop new ideas; the point is to assist the human creative process, not to finish the work in the person's place.</p>
+  </section>
+
+  <section>
+    <h2>Explanation</h2>
+    <p>Creative work rarely gets it right in one pass. A common description is that two kinds of thinking alternate: divergent thinking produces as many different possibilities as it can, and convergent thinking then selects among them and refines. Along the way creators revise again and again, and often only know what is wrong once they see a result.</p>
+    <p>The design of creativity support tools therefore cares about a few things: whether the tool can offer several options quickly, whether a person can adjust things directly, whether the tool keeps those adjustments, and whether the person still feels the work is their own. The last point is often called creative agency.</p>
+    <p>This differs from the usual way of measuring AI. Automating a task is judged by accuracy and efficiency; creativity support is judged by whether the tool fits the way people work. A model with high-quality output that cannot be steered or modified may be of limited help to a creator.</p>
+  </section>
+
+  <section>
+    <h2>What each source says</h2>
+    <h3>World and Human Action Models towards gameplay ideation (2025)</h3>
+    <p><a href="../sources/2025-world-and-human-action-models.html">This paper</a> starts from a user study. The authors interviewed 27 game creatives and identified two themes (p.2–3):</p>
+    <ul>
+    <li>The diverse ideas that come from divergent thinking are only meaningful inside a consistent game world.</li>
+    <li>Creatives need to control the iterative process, for example by editing frames directly and having the model adopt those edits.</li>
+    </ul>
+    <p>The authors turn these into three model capabilities that can be evaluated (p.3):</p>
+    <ul>
+    <li><strong>Consistency</strong>: generated content is coherent over time and follows the game mechanics.</li>
+    <li><strong>Diversity</strong>: the same starting point can produce several results that differ in meaningful ways.</li>
+    <li><strong>Persistency</strong>: a user's modifications are kept in later generations.</li>
+    </ul>
+    <p>The paper then trains the WHAM model and evaluates each of the three. It also builds a concept prototype, the WHAM Demonstrator, which shows interaction patterns such as generating branches, going back to change a choice, and editing frames directly (p.6–7).</p>
+    <p>The paper's position is that model evaluation should be informed by the needs of creatives, not only by the effectiveness and efficiency of task completion, and that a model built for creativity will not be an end in itself but one part of a creative workflow (p.7). The authors also note that earlier creativity support tools required structure to be defined by hand for a specific domain, whereas generative models can learn this structure from data (p.1).</p>
+  </section>
+
+  <section>
+    <h2>Related concepts</h2>
+    <ul>
+    <li><a href="world-model.html">World Model</a>: the kind of model this paper uses to support ideation.</li>
+    <li><a href="game-generation.html">Game Generation</a>: what is generated here is gameplay clips for ideation.</li>
+    <li><a href="evaluation-benchmark.html">Evaluation Benchmark</a>: each of the three capabilities has its own way of being measured.</li>
+    <li><a href="game-rule-understanding.html">Game Rule Understanding</a>: consistency requires generated content to follow the game mechanics.</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer">
+  <p>Written and maintained by AI following the rules in CLAUDE.md. These are reading notes; the original papers are authoritative.</p>
+</footer>
+</body>
+</html>

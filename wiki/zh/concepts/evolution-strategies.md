@@ -1,7 +1,7 @@
 ---
 title: 演化策略（Evolution Strategies）
 aliases: [ES, CMA-ES, 演化演算法, evolutionary algorithm, 黑箱最佳化, black-box optimization]
-updated: 2026-11-16
+updated: 2026-11-17
 sources: [2018-world-models]
 ---
 
@@ -35,3 +35,4 @@ sources: [2018-world-models]
 ## 相關概念
 
 - [世界模型（World Model）](world-model.md)：負責提供控制器所需的表示，讓控制器可以很小。
+- [強化學習（Reinforcement Learning）](reinforcement-learning.md)：演化策略在這裡取代一般的強化學習演算法，用來訓練控制器。

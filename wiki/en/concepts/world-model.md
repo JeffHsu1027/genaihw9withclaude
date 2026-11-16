@@ -1,23 +1,25 @@
 ---
 title: World Model
-aliases: [world model, environment model, dynamics model, model-based reinforcement learning, model-based RL, MDN-RNN]
-updated: 2026-11-16
-sources: [2018-world-models]
+aliases: [world model, environment model, dynamics model, model-based reinforcement learning, model-based RL, MDN-RNN, WHAM]
+updated: 2026-11-17
+sources: [2018-world-models, 2025-world-and-human-action-models]
 ---
 
 ## One-line definition
 
-An agent's internal model of its environment, which predicts what will happen next given the current state and an action.
+A model of an environment that predicts what will happen next given the current state and an action; it can be used to train an agent (World Models) or to generate content directly (WHAM).
 
 ## Explanation
 
-Reinforcement learning has two broad routes. One builds no model of the environment and learns how to act directly from trial and error. The other first learns a model of the environment and then uses it for planning or training; this is called model-based reinforcement learning.
+The idea of a world model comes from [reinforcement learning](reinforcement-learning.md), which has two broad routes. One builds no model of the environment and learns how to act directly from trial and error. The other first learns a model of the environment and then uses it for planning or training; this is called model-based reinforcement learning.
 
 A world model belongs to the second route. It usually does two things: it compresses high-dimensional observations, such as frames, into a compact representation, and it predicts how that representation changes with actions.
 
 With a world model, an agent can practise in "imagination" and does not have to interact with the real environment at every step. This is especially valuable when real interaction is slow, expensive, or risky.
 
 The main risk is that no model is perfectly accurate. If what the agent learns inside the model actually relies on the model's errors, it will stop working in the real environment.
+
+A world model can also be used without an agent, as a generative model in its own right: given a beginning, it generates what happens next (WHAM).
 
 ## What each source says
 
@@ -37,11 +39,46 @@ The paper also documents the risk in detail: the controller finds policies that 
 
 The limitations the authors point out include limited model capacity and simulating only step by step without hierarchical planning (p.12–13).
 
+### World and Human Action Models towards gameplay ideation (2025)
+
+[This paper](../sources/2025-world-and-human-action-models.md) states that it builds on the line of work on world models and cites the paper above (p.3). Its model, WHAM, also has a compression part and a prediction part, but with different components (p.3–4):
+
+- **Compression**: a VQGAN turns each frame into 540 discrete tokens (see [vector quantization](vector-quantization.md)).
+- **Prediction**: a 1.6-billion-parameter [autoregressive transformer](autoregressive-transformer.md) predicts the next token in a sequence of interleaved frames and controller actions.
+
+Three things differ from the earlier paper:
+
+- **It also predicts human actions.** This is what "Human Action" in the model's name refers to: besides frames, it predicts what the player will press next (p.3). It can therefore generate a complete gameplay clip, frames and actions together (p.10).
+- **The data comes from humans.** The training data is about 500,000 player trajectories from Bleeding Edge, more than 7 years of gameplay (p.3, p.10), not rollouts collected with a random policy.
+- **It is meant for people to look at.** This world model is not used to train an agent. It lets game creatives generate, compare, and modify gameplay clips, which is a form of [creativity support](creativity-support.md) (p.1, p.6–7).
+
+The evaluation changes accordingly. The paper does not look at an agent's score. It looks at whether the generated frames are consistent (FVD), whether the actions cover the range of human behavior (Wasserstein distance), and whether a user's modifications are kept (p.4–7).
+
+The authors report that the model captures the 3D structure of the game environment, the effects of controller actions, and the temporal structure of the game (p.3), and that the 1.6B model can generate clips that stay consistent for up to 2 minutes (p.4–5). The model's context is only 1 second (p.3).
+
+### Comparing the sources
+
+| | World Models (2018) | WHAM (2025) |
+|---|---|---|
+| Purpose | Training an agent: providing features, or replacing the actual environment | Letting human creatives ideate |
+| Representation of a frame | A continuous latent vector from a variational autoencoder | Discrete tokens from a VQGAN |
+| Sequence model | MDN-RNN | Autoregressive transformer |
+| What is predicted | The next latent vector | The next frame and the player's next action |
+| Training data | Rollouts from a random policy | Recordings of human players |
+| Environment | CarRacing and VizDoom | Bleeding Edge, a 3D multiplayer combat game |
+| How it is evaluated | The agent's score in the actual environment | Consistency, diversity, and persistency of generated clips |
+
+The two papers share the same skeleton: compress the frame first, then predict how the compressed representation changes. What changed over seven years is the scale, the components, and the source of the data, and the user of the world model went from an agent to a person. The 2018 paper worries that the controller will exploit the model's errors; the 2025 paper cares about whether the model can be steered and modified by a person. The later paper cites the earlier one, but the item-by-item comparison in the table is this wiki's own synthesis.
+
 ## Related concepts
 
-- [Variational Autoencoder](variational-autoencoder.md): the part of the world model that compresses frames.
-- [Evolution Strategies](evolution-strategies.md): the method used here to train the controller.
-- [Out-of-Distribution Generalization](out-of-distribution-generalization.md): a world model is wrong in states its training data did not cover.
+- [Variational Autoencoder](variational-autoencoder.md): the part of the world model in World Models (2018) that compresses frames.
+- [Evolution Strategies](evolution-strategies.md): the method World Models (2018) uses to train the controller.
+- [Out-of-Distribution Generalization](out-of-distribution-generalization.md): the world model in World Models (2018) is wrong in states its training data did not cover.
 - [Game Rule Understanding](game-rule-understanding.md): a world model implicitly learns how a game works from frames.
-- Note: the "Memory M" in this paper is the internal state of a neural network. It is not the same thing as [Agent Memory](agent-memory.md), which stores experience as text.
-- Note: a world model imitates an existing game. This differs from [Game Generation](game-generation.md), which creates a new game from a description.
+- [Reinforcement Learning](reinforcement-learning.md): where the idea of a world model comes from, and the problem setting of World Models (2018).
+- Note: the "Memory M" in World Models (2018) is the internal state of a neural network. It is not the same thing as [Agent Memory](agent-memory.md), which stores experience as text.
+- [Game Generation](game-generation.md): the world model in World Models only imitates an existing game and creates no new content; WHAM uses a world model to generate gameplay clips for ideation.
+- [Vector Quantization](vector-quantization.md): the method WHAM uses to compress frames.
+- [Autoregressive Transformer](autoregressive-transformer.md): the model WHAM uses to predict the future.
+- [Creativity Support](creativity-support.md): the purpose that WHAM's world model serves.

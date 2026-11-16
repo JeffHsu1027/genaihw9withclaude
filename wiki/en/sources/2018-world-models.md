@@ -6,7 +6,7 @@ venue: arXiv 1803.10122v4
 url: https://arxiv.org/abs/1803.10122
 raw: raw/world modelv4.pdf
 added: 2026-11-16
-concepts: [world-model, variational-autoencoder, evolution-strategies, out-of-distribution-generalization, game-rule-understanding]
+concepts: [world-model, variational-autoencoder, evolution-strategies, out-of-distribution-generalization, game-rule-understanding, reinforcement-learning]
 ---
 
 ## One-line summary
@@ -100,10 +100,12 @@ For reference, a random policy scores 210 ± 108 in the actual environment, and 
 - [Evolution Strategies](../concepts/evolution-strategies.md)
 - [Out-of-Distribution Generalization](../concepts/out-of-distribution-generalization.md)
 - [Game Rule Understanding](../concepts/game-rule-understanding.md)
+- [Reinforcement Learning](../concepts/reinforcement-learning.md)
 
 ## Relation to other sources
 
 - [LLM Game Rule Understanding through Out-of-Distribution Fine-Tuning (2025)](2025-llm-game-rule-understanding.md): both papers ask a model to predict the next state given the current state and an action. That paper hands the rules to an LLM explicitly as text and checks each answer. This paper provides no rules at all and lets a neural network learn how the game works from frames alone. Both also run into an out-of-distribution problem: there, fine-tuning stops helping when the rules differ too much; here, the world model is wrong when the controller reaches states the training data did not cover. This paper was published earlier and there is no citation between them; the comparison is this wiki's own synthesis.
+- [World and Human Action Models towards gameplay ideation (2025)](2025-world-and-human-action-models.md): that paper cites this one directly and states that it builds on the line of work on world models (p.3 of that paper). Both first compress frames and then use a sequence model to predict what comes next. That paper replaces the variational autoencoder with a VQGAN and the MDN-RNN with a 1.6-billion-parameter transformer, trains on human gameplay, and also predicts the player's actions; the purpose also changes from training an agent to supporting game creatives in ideation.
 
 ## My notes
 

@@ -45,6 +45,12 @@
       <p class="card-meta">Ha &amp; Schmidhuber · 2018</p>
       <p>作者把代理人拆成視覺、記憶與控制器三部分，先用無監督方式學出一個能壓縮畫面並預測未來的世界模型，再用它訓練一個極小的控制器；這個代理人解決了賽車任務，還能完全在世界模型產生的「夢境」中訓練，再把學到的策略搬回真實的 Doom 環境。</p>
     </a>
+    <a class="card card-source" href="sources/2025-world-and-human-action-models.html">
+      <span class="tag tag-source">來源</span>
+      <h3>World and Human Action Models towards gameplay ideation</h3>
+      <p class="card-meta">Kanervisto et al. · 2025</p>
+      <p>作者先訪談 27 位遊戲創作者，歸納出生成式 AI 要支援創意發想必須具備一致性、多樣性與持續性三種能力，再用約 7 年份的人類遊玩資料訓練出 WHAM：一個把畫面與手把動作都轉成離散 token、用 transformer 逐一預測的世界模型，並分別用 FVD、Wasserstein 距離與人工標註來評估這三種能力。</p>
+    </a>
     <!-- 新的來源卡片加在這行上面 -->
   </div>
 
@@ -54,7 +60,7 @@
     <a class="card card-concept" href="concepts/game-rule-understanding.html">
       <span class="tag tag-concept">概念</span>
       <h3>遊戲規則理解（Game Rule Understanding）</h3>
-      <p class="card-meta">2 個來源</p>
+      <p class="card-meta">3 個來源</p>
       <p>模型能否正確掌握一套遊戲規則，並用它來判斷、預測、遊玩，甚至評估與修改規則本身。</p>
     </a>
     <a class="card card-concept" href="concepts/out-of-distribution-generalization.html">
@@ -90,8 +96,8 @@
     <a class="card card-concept" href="concepts/game-generation.html">
       <span class="tag tag-concept">概念</span>
       <h3>遊戲生成（Game Generation）</h3>
-      <p class="card-meta">2 個來源</p>
-      <p>讓 AI 依照自然語言的描述，自動產生遊戲或遊戲的一部分，例如程式碼、規則或關卡。</p>
+      <p class="card-meta">3 個來源</p>
+      <p>讓 AI 依照人給的提示（例如自然語言描述或參考畫面），自動產生遊戲或遊戲的一部分，例如程式碼、規則、關卡或遊玩片段。</p>
     </a>
     <a class="card card-concept" href="concepts/agent-memory.html">
       <span class="tag tag-concept">概念</span>
@@ -102,14 +108,14 @@
     <a class="card card-concept" href="concepts/evaluation-benchmark.html">
       <span class="tag tag-concept">概念</span>
       <h3>評測基準（Evaluation Benchmark）</h3>
-      <p class="card-meta">2 個來源</p>
+      <p class="card-meta">3 個來源</p>
       <p>一組固定的任務加上評分方法，用來以可重複的方式衡量某種能力或某種產出的品質。</p>
     </a>
     <a class="card card-concept" href="concepts/world-model.html">
       <span class="tag tag-concept">概念</span>
       <h3>世界模型（World Model）</h3>
-      <p class="card-meta">1 個來源</p>
-      <p>代理人內部對環境的模型，能根據目前的狀態與動作預測接下來會發生什麼。</p>
+      <p class="card-meta">2 個來源</p>
+      <p>對環境的模型，能根據目前的狀態與動作預測接下來會發生什麼；可以用來訓練代理人（World Models），也可以直接用來生成內容（WHAM）。</p>
     </a>
     <a class="card card-concept" href="concepts/variational-autoencoder.html">
       <span class="tag tag-concept">概念</span>
@@ -122,6 +128,30 @@
       <h3>演化策略（Evolution Strategies）</h3>
       <p class="card-meta">1 個來源</p>
       <p>一類模仿演化的最佳化方法：反覆產生多組候選參數，評估每一組的表現，再根據表現好的候選產生下一代。</p>
+    </a>
+    <a class="card card-concept" href="concepts/creativity-support.html">
+      <span class="tag tag-concept">概念</span>
+      <h3>創意支援（Creativity Support）</h3>
+      <p class="card-meta">1 個來源</p>
+      <p>用工具協助人產生並發展新的想法，重點是輔助人的創作過程，而不是代替人完成作品。</p>
+    </a>
+    <a class="card card-concept" href="concepts/vector-quantization.html">
+      <span class="tag tag-concept">概念</span>
+      <h3>向量量化（Vector Quantization）</h3>
+      <p class="card-meta">1 個來源</p>
+      <p>把連續的向量換成一份有限碼本中最接近的那一個條目，讓資料可以用一串離散的編號來表示。</p>
+    </a>
+    <a class="card card-concept" href="concepts/autoregressive-transformer.html">
+      <span class="tag tag-concept">概念</span>
+      <h3>自回歸 Transformer（Autoregressive Transformer）</h3>
+      <p class="card-meta">1 個來源</p>
+      <p>一種序列模型，每次只根據前面已有的 token 預測下一個 token，再把結果接回序列繼續往下生成。</p>
+    </a>
+    <a class="card card-concept" href="concepts/reinforcement-learning.html">
+      <span class="tag tag-concept">概念</span>
+      <h3>強化學習（Reinforcement Learning）</h3>
+      <p class="card-meta">2 個來源</p>
+      <p>讓代理人透過與環境互動、依得到的獎勵調整行為，逐步學會能取得最多累積獎勵的做法。</p>
     </a>
     <!-- 新的概念卡片加在這行上面 -->
   </div>
